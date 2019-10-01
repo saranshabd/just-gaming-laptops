@@ -1,7 +1,6 @@
 package com.mujdell2019.hackathon.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +10,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.mujdell2019.hackathon.models.UserDBModel;
-import com.mujdell2019.hackathon.utils.Encryption;
+import com.mujdell2019.hackathon.utils.EncryptionUtils;
 
 @Component
 @Scope("singleton")
 public class UserDAO {
 
 	@Autowired
-	private ApplicationContext factory;
+	private EncryptionUtils encryptionUtil;
 	
 	// Amazon DynamoDB objects
 	private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.AP_SOUTH_1).build();
@@ -42,7 +41,7 @@ public class UserDAO {
 	public void addUser(String username, String name, String password) {
 		
 		// hash password
-		String hashPassword = factory.getBean(Encryption.class).hash(password);
+		String hashPassword = encryptionUtil.hash(password);
 		
 		// store user in DB
 		UserDBModel user = new UserDBModel(username, name, hashPassword);
@@ -58,6 +57,6 @@ public class UserDAO {
 		UserDBModel user = mapper.load(UserDBModel.class, username);
 		
 		// compare passwords
-		return factory.getBean(Encryption.class).compareHash(user.getPassword(), password);
+		return encryptionUtil.compareHash(user.getPassword(), password);
 	}
 }

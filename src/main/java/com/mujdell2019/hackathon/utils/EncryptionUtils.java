@@ -12,7 +12,7 @@ import org.springframework.util.DigestUtils;
 
 @Component
 @Scope("singleton")
-public class Encryption {
+public class EncryptionUtils {
 
 	@Value("${application.encryption.iv}")
 	private String encryptionIv;
