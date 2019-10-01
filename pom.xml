@@ -55,6 +55,11 @@
 		    <version>0.10.7</version>
 		    <scope>runtime</scope>
 		</dependency>
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk</artifactId>
+		    <version>1.11.608</version>
+		</dependency>
 	</dependencies>
 
 	<build>
