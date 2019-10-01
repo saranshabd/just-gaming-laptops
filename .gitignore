@@ -1,8 +1,7 @@
 HELP.md
 target/
 .mvn/
-!**/src/main/**
-!**/src/test/**
+src/main/resources/
 
 ### STS ###
 .apt_generated
