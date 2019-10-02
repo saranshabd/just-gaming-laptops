@@ -1,4 +1,4 @@
-# muj-dell-2019/hackathon
+# just-gaming-laptops
 
 Hackathon project for MUJ Dell Internship drive
 
