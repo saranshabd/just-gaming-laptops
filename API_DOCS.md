@@ -42,3 +42,15 @@
 		"username" : "<String>"
 	}
 	```
+
+- `~/api/user/auth/verify`
+	<br>
+	Check if username already exists
+	
+	**Parameters**
+	
+  ```json
+	{
+		"username" : "<String>"
+	}
+	```

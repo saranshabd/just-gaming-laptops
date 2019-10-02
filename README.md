@@ -1,10 +1,13 @@
 # just-gaming-laptops
 
-Hackathon project for MUJ Dell Internship drive
+Hackathon project for MUJ Dell Internship Drive 2019
 
 <br>
 
-**API Documentation** : [API_DOCS.md](https://github.com/muj-dell-2019/hackathon/blob/master/API_DOCS.md)
+### API Documentation
+You can find API Documentation for this project at [API_DOCS.md](https://github.com/saran-shabd/just-gaming-laptops/blob/master/API_DOCS.md)
+
+<br>
 
 ### Backend Developers
 - [Shabd Saran](https://www.github.com/saran-shabd)
