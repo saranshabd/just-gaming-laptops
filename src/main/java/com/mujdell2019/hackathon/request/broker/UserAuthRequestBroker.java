@@ -30,12 +30,22 @@ public class UserAuthRequestBroker {
 	public ResponseEntity<APIResponse> registerNewUser(@RequestBody JsonNode requestBody) {
 		
 		// get user information from requestBody
-		String username = requestBody.get("username").asText();
-		String name = requestBody.get("name").asText();
-		String password = requestBody.get("password").asText();
+		JsonNode usernameNode = requestBody.get("username");
+		JsonNode nameNode = requestBody.get("name");
+		JsonNode passwordNode = requestBody.get("password");
 
-		if (stringUtils.containsEmpty(Arrays.asList(username, name, password))) {
+		if (null == usernameNode || null == nameNode || null == passwordNode) {
 			// invalid arguments passed
+			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			return new ResponseEntity<>(response, response.getStatus());
+		}
+		
+		String username = usernameNode.asText();
+		String name = nameNode.asText();
+		String password = passwordNode.asText();
+		
+		if (stringUtils.containsEmpty(Arrays.asList(username, name, password))) {
+			// empty strings passed
 			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}
@@ -43,16 +53,25 @@ public class UserAuthRequestBroker {
 		APIResponse response = requestHandler.registerNewUser(username, name, password);
 		return new ResponseEntity<>(response, response.getStatus());
 	}
-
+	
 	@PutMapping("/login")
 	public ResponseEntity<APIResponse> loginExistingUser(@RequestBody JsonNode requestBody) {
 		
 		// get user information from requestBody
-		String username = requestBody.get("username").asText();
-		String password = requestBody.get("password").asText();
-
-		if (stringUtils.containsEmpty(Arrays.asList(username, password))) {
+		JsonNode usernameNode = requestBody.get("username");
+		JsonNode passwordNode = requestBody.get("password");
+		
+		if (null == usernameNode || null == passwordNode) {
 			// invalid arguments passed
+			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			return new ResponseEntity<>(response, response.getStatus());
+		}
+
+		String username = usernameNode.asText();
+		String password = passwordNode.asText();
+		
+		if (stringUtils.containsEmpty(Arrays.asList(username, password))) {
+			// empty strings passed
 			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}
@@ -65,10 +84,18 @@ public class UserAuthRequestBroker {
 	public ResponseEntity<APIResponse> signoutExistingUser(@RequestBody JsonNode requestBody) {
 		
 		// get user information from requestBody
-		String username = requestBody.get("username").asText();
-
-		if (stringUtils.isEmpty(username)) {
+		JsonNode usernameNode = requestBody.get("username");
+		
+		if (null == usernameNode) {
 			// invalid arguments passed
+			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			return new ResponseEntity<>(response, response.getStatus());
+		}
+
+		String username = usernameNode.asText();
+		
+		if (stringUtils.isEmpty(username)) {
+			// empty strings passed
 			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}

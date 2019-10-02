@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -20,9 +21,9 @@ public class UserDAO {
 	private EncryptionUtils encryptionUtil;
 	
 	// Amazon DynamoDB objects
-	private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.AP_SOUTH_1).build();
+	private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withCredentials(new ProfileCredentialsProvider()).withRegion(Regions.AP_SOUTH_1).build();
 	private DynamoDBMapper mapper = new DynamoDBMapper(client);
-	
+
 	/*
 	 * check in DB whether user already exists with given user-name
 	 * */
