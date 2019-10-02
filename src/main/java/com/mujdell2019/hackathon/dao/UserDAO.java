@@ -4,13 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.mujdell2019.hackathon.models.UserDBModel;
+import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 import com.mujdell2019.hackathon.utils.EncryptionUtils;
 
 @Component
@@ -19,11 +15,9 @@ public class UserDAO {
 
 	@Autowired
 	private EncryptionUtils encryptionUtil;
+	@Autowired
+	private DynamoDBUtil dynamoDBUtil;
 	
-	// Amazon DynamoDB objects
-	private AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withCredentials(new ProfileCredentialsProvider()).withRegion(Regions.AP_SOUTH_1).build();
-	private DynamoDBMapper mapper = new DynamoDBMapper(client);
-
 	/*
 	 * check in DB whether user already exists with given user-name
 	 * */
@@ -33,7 +27,7 @@ public class UserDAO {
 		UserDBModel user = new UserDBModel(username);
 		DynamoDBQueryExpression<UserDBModel> queryExpression = new DynamoDBQueryExpression<UserDBModel>().withHashKeyValues(user);
 
-		return 0 != mapper.count(UserDBModel.class, queryExpression);
+		return 0 != dynamoDBUtil.getDynamoDBMapper().count(UserDBModel.class, queryExpression);
 	}
 	
 	/*
@@ -46,7 +40,7 @@ public class UserDAO {
 		
 		// store user in DB
 		UserDBModel user = new UserDBModel(username, name, hashPassword);
-		mapper.save(user);
+		dynamoDBUtil.getDynamoDBMapper().save(user);
 	}
 	
 	/*
@@ -55,7 +49,7 @@ public class UserDAO {
 	public boolean correctPassword(String username, String password) {
 		
 		// load user info from DB
-		UserDBModel user = mapper.load(UserDBModel.class, username);
+		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
 		
 		// compare passwords
 		return encryptionUtil.compareHash(user.getPassword(), password);
