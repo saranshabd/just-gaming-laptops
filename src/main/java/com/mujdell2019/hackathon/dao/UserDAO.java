@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.mujdell2019.hackathon.models.UserDBModel;
+import com.mujdell2019.hackathon.models.db.UserDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 import com.mujdell2019.hackathon.utils.EncryptionUtils;
 

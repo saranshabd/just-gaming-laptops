@@ -1,4 +1,4 @@
-package com.mujdell2019.hackathon.models;
+package com.mujdell2019.hackathon.models.api;
 
 import org.springframework.http.HttpStatus;
 

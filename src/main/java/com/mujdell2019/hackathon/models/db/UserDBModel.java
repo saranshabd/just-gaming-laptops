@@ -1,4 +1,4 @@
-package com.mujdell2019.hackathon.models;
+package com.mujdell2019.hackathon.models.db;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mujdell2019.hackathon.models.APIResponse;
+import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.request.handler.UserAuthRequestHandler;
 import com.mujdell2019.hackathon.utils.StringUtils;
 

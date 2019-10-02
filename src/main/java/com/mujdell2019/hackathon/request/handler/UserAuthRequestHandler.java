@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.mujdell2019.hackathon.dao.UserDAO;
-import com.mujdell2019.hackathon.models.APIResponse;
+import com.mujdell2019.hackathon.models.api.APIResponse;
 
 @Component
 @Scope("singleton")
