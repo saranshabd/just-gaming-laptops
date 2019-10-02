@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mujdell2019.hackathon.dao.UserDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 
@@ -47,5 +50,20 @@ public class UserAuthRequestHandler {
 			return new APIResponse("user not registered", HttpStatus.BAD_REQUEST, null);
 		
 		return new APIResponse("user logged out", HttpStatus.OK, null);
+	}
+	
+	public APIResponse verifyExistingUser(String username) {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode response = objectMapper.createObjectNode();
+		
+		if (!userDao.exists(username)) {
+			// user with given user-name does not exists
+			((ObjectNode) response).put("isUser", false);
+			return new APIResponse("user not registered", HttpStatus.BAD_REQUEST, response);
+		}
+		
+		((ObjectNode) response).put("isUser", true);
+		return new APIResponse("user verified", HttpStatus.OK, response);
 	}
 }

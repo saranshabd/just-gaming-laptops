@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -101,6 +102,30 @@ public class UserAuthRequestBroker {
 		}
 		
 		APIResponse response = requestHandler.signoutExistingUser(username);
+		return new ResponseEntity<>(response, response.getStatus());
+	}
+	
+	@GetMapping("/verify")
+	public ResponseEntity<APIResponse> verifyExistingUser(@RequestBody JsonNode requestBody) {
+		
+		// get user information from requestBody
+		JsonNode usernameNode = requestBody.get("username");
+		
+		if (null == usernameNode) {
+			// invalid arguments passed
+			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			return new ResponseEntity<>(response, response.getStatus());
+		}
+
+		String username = usernameNode.asText();
+		
+		if (stringUtils.isEmpty(username)) {
+			// empty strings passed
+			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			return new ResponseEntity<>(response, response.getStatus());
+		}
+		
+		APIResponse response = requestHandler.verifyExistingUser(username);
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 }
