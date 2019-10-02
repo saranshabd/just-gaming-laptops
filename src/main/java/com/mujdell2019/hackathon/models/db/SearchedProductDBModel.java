@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.mujdell2019.hackathon.models.db.product.ProductFeaturesDBModel;
 
@@ -44,7 +45,7 @@ public class SearchedProductDBModel {
 	
 	/* Getters and Setters */
 	
-	@DynamoDBAttribute(attributeName = "searchQuery")
+	@DynamoDBHashKey(attributeName = "searchQuery")
 	public String getSearchQuery() { return searchQuery; }
 	public void setSearchQuery(String searchQuery) { this.searchQuery = searchQuery; }
 

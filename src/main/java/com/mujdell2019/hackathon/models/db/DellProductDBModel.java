@@ -29,6 +29,11 @@ public class DellProductDBModel {
 		features = new ProductFeaturesDBModel();
 	}
 	
+	public DellProductDBModel(String id) {
+		this();
+		this.id = id;
+	}
+	
 	public DellProductDBModel(String id, String name, int price, List<String> locations, double discount, ProductFeaturesDBModel features) {
 		this.id = id;
 		this.name = name;
