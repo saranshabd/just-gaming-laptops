@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
@@ -20,6 +21,18 @@ public class DellProductDAO {
 	private DynamoDBUtil dynamoDBUtil;
 	
 	
+	/**
+	 * check if given product id is valid
+	 * */
+	public boolean checkProductId(String id) {
+		
+		// search for product with given product id
+		DellProductDBModel product = new DellProductDBModel(id);
+		DynamoDBQueryExpression<DellProductDBModel> queryExpression = new DynamoDBQueryExpression<DellProductDBModel>().withHashKeyValues(product);
+
+		return 0 != dynamoDBUtil.getDynamoDBMapper().count(DellProductDBModel.class, queryExpression);
+	}
+
 	/**
 	 * load single dell product by its product id
 	 * */

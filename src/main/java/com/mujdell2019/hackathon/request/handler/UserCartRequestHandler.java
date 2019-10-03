@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mujdell2019.hackathon.dao.DellProductDAO;
 import com.mujdell2019.hackathon.dao.UserDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
@@ -21,6 +22,8 @@ public class UserCartRequestHandler {
 	
 	@Autowired
 	private UserDAO userDAO;
+	@Autowired
+	private DellProductDAO dellProductDAO;
 
 	public APIResponse getAllCartProductFromCart(String username) {
 		
@@ -40,11 +43,14 @@ public class UserCartRequestHandler {
 		((ObjectNode) response).set("cart", cartItemsNode);
 		
 		
-		APIResponse result = new APIResponse("user cart items", HttpStatus.OK, response);
-		return result;
+		return new APIResponse("user cart items", HttpStatus.OK, response);
 	}
 	
 	public APIResponse addItemToCart(String username, String productId) {
+		
+		// check if product id is valid
+		if (!dellProductDAO.checkProductId(productId))
+			return new APIResponse("invalid product id", HttpStatus.BAD_REQUEST, null);
 		
 		// check if item is already present in cart
 		if (!userDAO.checkProductInCart(username, productId)) {
@@ -53,21 +59,19 @@ public class UserCartRequestHandler {
 			userDAO.addToCart(username, productId);
 		}
 
-		APIResponse response = new APIResponse("item added to cart", HttpStatus.OK, null);
-		return response;
+		return new APIResponse("item added to cart", HttpStatus.OK, null);
 	}
 	
 	public APIResponse deleteItemFromCart(String username, String productId) {
 		
-		if (!userDAO.checkProductInCart(username, productId)) {
-			
-			// item not present in cart
-			
-			APIResponse response = new APIResponse("item not present in cart", HttpStatus.BAD_REQUEST, null);
-			return response;
-		}
+		// check if product id is valid
+		if (!dellProductDAO.checkProductId(productId))
+			return new APIResponse("invalid product id", HttpStatus.BAD_REQUEST, null);
+
+		// check if item is not present in cart
+		if (!userDAO.checkProductInCart(username, productId))
+			return new APIResponse("item not present in cart", HttpStatus.BAD_REQUEST, null);
 		
-		APIResponse response = new APIResponse("item deleted from cart", HttpStatus.OK, null);
-		return response;
+		return new APIResponse("item deleted from cart", HttpStatus.OK, null);
 	}
 }
