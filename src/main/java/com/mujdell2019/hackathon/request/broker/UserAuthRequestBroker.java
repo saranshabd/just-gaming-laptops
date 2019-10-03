@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +54,7 @@ public class UserAuthRequestBroker {
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 	
-	@PutMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<APIResponse> loginExistingUser(@RequestBody JsonNode requestBody) {
 		
 		// get user information from requestBody
@@ -81,7 +80,7 @@ public class UserAuthRequestBroker {
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 	
-	@PutMapping("/signout")
+	@PostMapping("/signout")
 	public ResponseEntity<APIResponse> signoutExistingUser(@RequestBody JsonNode requestBody) {
 		
 		// get user information from requestBody
