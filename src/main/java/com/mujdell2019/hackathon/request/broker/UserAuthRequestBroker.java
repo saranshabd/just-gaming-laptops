@@ -29,102 +29,134 @@ public class UserAuthRequestBroker {
 	@PostMapping("/register")
 	public ResponseEntity<APIResponse> registerNewUser(@RequestBody JsonNode requestBody) {
 		
-		// get user information from requestBody
-		JsonNode usernameNode = requestBody.get("username");
-		JsonNode nameNode = requestBody.get("name");
-		JsonNode passwordNode = requestBody.get("password");
+		try {
+			// get user information from requestBody
+			JsonNode usernameNode = requestBody.get("username");
+			JsonNode nameNode = requestBody.get("name");
+			JsonNode passwordNode = requestBody.get("password");
 
-		if (null == usernameNode || null == nameNode || null == passwordNode) {
-			// invalid arguments passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			if (null == usernameNode || null == nameNode || null == passwordNode) {
+				// invalid arguments passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			String username = usernameNode.asText();
+			String name = nameNode.asText();
+			String password = passwordNode.asText();
+			
+			if (stringUtils.containsEmpty(Arrays.asList(username, name, password))) {
+				// empty strings passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			APIResponse response = requestHandler.registerNewUser(username, name, password);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}
-		
-		String username = usernameNode.asText();
-		String name = nameNode.asText();
-		String password = passwordNode.asText();
-		
-		if (stringUtils.containsEmpty(Arrays.asList(username, name, password))) {
-			// empty strings passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
-		
-		APIResponse response = requestHandler.registerNewUser(username, name, password);
-		return new ResponseEntity<>(response, response.getStatus());
 	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<APIResponse> loginExistingUser(@RequestBody JsonNode requestBody) {
 		
-		// get user information from requestBody
-		JsonNode usernameNode = requestBody.get("username");
-		JsonNode passwordNode = requestBody.get("password");
-		
-		if (null == usernameNode || null == passwordNode) {
-			// invalid arguments passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		try {
+			// get user information from requestBody
+			JsonNode usernameNode = requestBody.get("username");
+			JsonNode passwordNode = requestBody.get("password");
+			
+			if (null == usernameNode || null == passwordNode) {
+				// invalid arguments passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
 
-		String username = usernameNode.asText();
-		String password = passwordNode.asText();
-		
-		if (stringUtils.containsEmpty(Arrays.asList(username, password))) {
-			// empty strings passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			String username = usernameNode.asText();
+			String password = passwordNode.asText();
+			
+			if (stringUtils.containsEmpty(Arrays.asList(username, password))) {
+				// empty strings passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			APIResponse response = requestHandler.loginExistingUser(username, password);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}
-		
-		APIResponse response = requestHandler.loginExistingUser(username, password);
-		return new ResponseEntity<>(response, response.getStatus());
 	}
 	
 	@PostMapping("/signout")
 	public ResponseEntity<APIResponse> signoutExistingUser(@RequestBody JsonNode requestBody) {
 		
-		// get user information from requestBody
-		JsonNode usernameNode = requestBody.get("username");
-		
-		if (null == usernameNode) {
-			// invalid arguments passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		try {
+			// get user information from requestBody
+			JsonNode usernameNode = requestBody.get("username");
+			
+			if (null == usernameNode) {
+				// invalid arguments passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
 
-		String username = usernameNode.asText();
-		
-		if (stringUtils.isEmpty(username)) {
-			// empty strings passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			String username = usernameNode.asText();
+			
+			if (stringUtils.isEmpty(username)) {
+				// empty strings passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			APIResponse response = requestHandler.signoutExistingUser(username);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}
-		
-		APIResponse response = requestHandler.signoutExistingUser(username);
-		return new ResponseEntity<>(response, response.getStatus());
 	}
 	
 	@GetMapping("/verify")
 	public ResponseEntity<APIResponse> verifyExistingUser(@RequestBody JsonNode requestBody) {
 		
-		// get user information from requestBody
-		JsonNode usernameNode = requestBody.get("username");
-		
-		if (null == usernameNode) {
-			// invalid arguments passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		try {
+			// get user information from requestBody
+			JsonNode usernameNode = requestBody.get("username");
+			
+			if (null == usernameNode) {
+				// invalid arguments passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
 
-		String username = usernameNode.asText();
-		
-		if (stringUtils.isEmpty(username)) {
-			// empty strings passed
-			APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+			String username = usernameNode.asText();
+			
+			if (stringUtils.isEmpty(username)) {
+				// empty strings passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			APIResponse response = requestHandler.verifyExistingUser(username);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
 			return new ResponseEntity<>(response, response.getStatus());
 		}
-		
-		APIResponse response = requestHandler.verifyExistingUser(username);
-		return new ResponseEntity<>(response, response.getStatus());
 	}
 }
