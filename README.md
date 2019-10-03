@@ -6,9 +6,3 @@ Hackathon project for MUJ Dell Internship Drive 2019
 
 ### API Documentation
 You can find API Documentation for this project at [API_DOCS.md](https://github.com/saran-shabd/just-gaming-laptops/blob/master/API_DOCS.md)
-
-<br>
-
-### Backend Developers
-- [Shabd Saran](https://www.github.com/saran-shabd)
-- [Shikhar Vaish](https://www.github.com/svr8)
