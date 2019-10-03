@@ -5,6 +5,9 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +29,7 @@ public class UserCartRequestBroker {
 	/**
 	 * get all products from cart
 	 * */
+	@GetMapping("")
 	public ResponseEntity<APIResponse> getAllProductsFromCart(@RequestBody JsonNode requestBody) {
 		
 		try {
@@ -60,6 +64,7 @@ public class UserCartRequestBroker {
 	/**
 	 * add item to cart
 	 * */
+	@PutMapping("/item")
 	public ResponseEntity<APIResponse> addItemToCart(@RequestBody JsonNode requestBody) {
 		
 		try {
@@ -96,6 +101,7 @@ public class UserCartRequestBroker {
 	/**
 	 * delete item from cart
 	 * */
+	@DeleteMapping("/item")
 	public ResponseEntity<APIResponse> deleteItemFromCart(@RequestBody JsonNode requestBody) {
 		
 		try {
