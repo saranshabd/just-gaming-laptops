@@ -4,8 +4,9 @@
 
 ## Authentication Routes
 
-- POST `~/api/user/auth/register`
+- *POST* `~/api/user/auth/register`
 	<br>
+	
 	Register New User in Database.
 	
 	**Parameters**
@@ -18,8 +19,9 @@
 	}
 	```
 	
-- POST `~/api/user/auth/login`
+- *POST* `~/api/user/auth/login`
 	<br>
+	
 	Login Existing User
 	
 	**Parameters**
@@ -31,8 +33,9 @@
 	}
 	```
 
-- POST `~/api/user/auth/signout`
+- *POST* `~/api/user/auth/signout`
 	<br>
+	
 	Signout Existing User
 	
 	**Parameters**
@@ -43,8 +46,9 @@
 	}
 	```
 
-- GET `~/api/user/auth/verify`
+- *GET* `~/api/user/auth/verify`
 	<br>
+	
 	Check if username already exists
 	
 	**Parameters**
@@ -58,8 +62,9 @@
 	
 ## Cart Routes
 
-- GET `~/api/user/cart`
+- *GET* `~/api/user/cart`
 	<br>
+	
 	Get all products in user cart
 	
 	**Parameters**
@@ -70,8 +75,9 @@
 	}
 	```
 
-- PUT `~/api/user/cart/item`
+- *PUT* `~/api/user/cart/item`
 	<br>
+	
 	Add item to user cart
 	
 	**Parameters**
@@ -83,8 +89,9 @@
 	}
 	```
 
-- DELETE `~/api/user/cart/item`
+- *DELETE* `~/api/user/cart/item`
 	<br>
+	
 	Delete item from user cart
 	
 	**Parameters**
