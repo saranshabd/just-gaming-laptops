@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.mujdell2019.hackathon.models.db.UserDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
@@ -20,6 +21,12 @@ public class UserDAO {
 	@Autowired
 	private DynamoDBUtil dynamoDBUtil;
 	
+	// configuration object for consistent reads from DB
+	private DynamoDBMapperConfig consistentReadConfig = DynamoDBMapperConfig
+														.builder()
+														.withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT)
+														.build();
+	
 	/**
 	 * check in DB whether user already exists with given user-name
 	 * */
@@ -27,7 +34,9 @@ public class UserDAO {
 		
 		// search for user with given user-name in DB
 		UserDBModel user = new UserDBModel(username);
-		DynamoDBQueryExpression<UserDBModel> queryExpression = new DynamoDBQueryExpression<UserDBModel>().withHashKeyValues(user);
+		DynamoDBQueryExpression<UserDBModel> queryExpression = new DynamoDBQueryExpression<UserDBModel>()
+																	.withConsistentRead(true)
+																	.withHashKeyValues(user);
 
 		return 0 != dynamoDBUtil.getDynamoDBMapper().count(UserDBModel.class, queryExpression);
 	}
@@ -51,7 +60,7 @@ public class UserDAO {
 	public boolean correctPassword(String username, String password) {
 		
 		// load user info from DB
-		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
+		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username, consistentReadConfig);
 		
 		// compare passwords
 		return encryptionUtil.compareHash(user.getPassword(), password);
@@ -63,7 +72,7 @@ public class UserDAO {
 	public void addToCart(String username, String productId) {
 		
 		// load user information from DB
-		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
+		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username, consistentReadConfig);
 		
 		// add given product id to user cart
 		user.getCart().add(productId);
@@ -78,7 +87,7 @@ public class UserDAO {
 	public void deleteFromCart(String username, String productId) {
 		
 		// load user information from DB
-		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
+		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username, consistentReadConfig);
 		
 		// delete given product id from user cart
 		user.getCart().remove(user.getCart().indexOf(productId));
@@ -93,7 +102,7 @@ public class UserDAO {
 	public boolean checkProductInCart(String username, String productId) {
 		
 		// load user profile from DB
-		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
+		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username, consistentReadConfig);
 		
 		// check if given product id is present in user cart
 		for (String product : user.getCart())
@@ -108,7 +117,7 @@ public class UserDAO {
 	public List<String> getAllProductsFromCart(String username) {
 		
 		// load user profile from DB
-		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
+		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username, consistentReadConfig);
 
 		return user.getCart();
 	}
