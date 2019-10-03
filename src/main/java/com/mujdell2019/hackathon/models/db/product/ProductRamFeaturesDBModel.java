@@ -2,9 +2,13 @@ package com.mujdell2019.hackathon.models.db.product;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mujdell2019.hackathon.models.IMarshal;
 
 @DynamoDBDocument
-public class ProductRamFeaturesDBModel {
+public class ProductRamFeaturesDBModel implements IMarshal {
 	
 	/* Data Members */
 	
@@ -31,4 +35,19 @@ public class ProductRamFeaturesDBModel {
 	@DynamoDBAttribute(attributeName = "size")
 	public int getSize() {return size; }
 	public void setSize(int size) { this.size = size; }
+	
+	
+	/* JSON Marshal Method */
+	
+	@Override
+	public JsonNode marshal() {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode result = objectMapper.createObjectNode();
+		
+		((ObjectNode) result).put("type", getType());
+		((ObjectNode) result).put("size", getSize());
+		
+		return result;
+	}
 }

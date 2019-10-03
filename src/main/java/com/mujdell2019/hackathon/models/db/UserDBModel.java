@@ -6,9 +6,14 @@ import java.util.List;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mujdell2019.hackathon.models.IMarshal;
 
 @DynamoDBTable(tableName="users")
-public class UserDBModel {
+public class UserDBModel implements IMarshal {
 	
 	/* Data Members */
 
@@ -56,4 +61,25 @@ public class UserDBModel {
 	@DynamoDBAttribute(attributeName = "cart")
 	public List<String> getCart() { return cart; }
 	public void setCart(List<String> cart) { this.cart = cart; }
+	
+	
+	/* JSON Marshal Method */
+	
+	@Override
+	public JsonNode marshal() {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode result = objectMapper.createObjectNode();
+		
+		((ObjectNode) result).put("username", getUsername());
+		((ObjectNode) result).put("name", getName());
+		((ObjectNode) result).put("password", getPassword());
+		
+		JsonNode cart = objectMapper.createArrayNode();
+		for (String cartItem : getCart())
+			((ArrayNode) cart).add(cartItem);
+		((ObjectNode) result).set("cart", cart);
+		
+		return result;
+	}
 }

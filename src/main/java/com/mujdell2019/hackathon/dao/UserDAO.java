@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.models.db.UserDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 import com.mujdell2019.hackathon.utils.EncryptionUtils;
@@ -20,6 +21,8 @@ public class UserDAO {
 	private EncryptionUtils encryptionUtil;
 	@Autowired
 	private DynamoDBUtil dynamoDBUtil;
+	@Autowired
+	private DellProductDAO dellProductDAO;
 	
 	// configuration object for consistent reads from DB
 	private DynamoDBMapperConfig consistentReadConfig = DynamoDBMapperConfig
@@ -112,13 +115,27 @@ public class UserDAO {
 	}
 	
 	/**
-	 * get all items from cart
+	 * get product id of all items from user cart
 	 * */
-	public List<String> getAllProductsFromCart(String username) {
+	private List<String> getAllItemProductIdsFromCart(String username) {
 		
 		// load user profile from DB
 		UserDBModel user = dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username, consistentReadConfig);
 
 		return user.getCart();
+	}
+	
+	/**
+	 * get all products from user cart
+	 * */
+	public List<DellProductDBModel> getAllItemFromCart(String username) {
+		
+		// load product id of all items in user cart
+		List<String> itemsProductId = getAllItemProductIdsFromCart(username);
+		
+		// load product information of all the product ids
+		List<DellProductDBModel> result = dellProductDAO.getProducts(itemsProductId);
+		
+		return result;
 	}
 }

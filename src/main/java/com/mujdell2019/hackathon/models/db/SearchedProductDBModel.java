@@ -6,10 +6,15 @@ import java.util.List;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mujdell2019.hackathon.models.IMarshal;
 import com.mujdell2019.hackathon.models.db.product.ProductFeaturesDBModel;
 
 @DynamoDBTable(tableName = "searchedProducts")
-public class SearchedProductDBModel {
+public class SearchedProductDBModel implements IMarshal {
 	
 	/* Data Members */
 	
@@ -72,4 +77,28 @@ public class SearchedProductDBModel {
 	@DynamoDBAttribute(attributeName = "features")
 	public ProductFeaturesDBModel getFeatures() { return features; }
 	public void setFeatures(ProductFeaturesDBModel features) { this.features = features; }
+	
+	
+	/* JSON Marshal Method */
+	
+	@Override
+	public JsonNode marshal() {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode result = objectMapper.createObjectNode();
+		
+		((ObjectNode) result).put("searchQuery", getSearchQuery());
+		((ObjectNode) result).put("frequency", getFrequency());
+		((ObjectNode) result).put("price", getPrice());
+		((ObjectNode) result).put("lastSearched", getLastSearched());
+		((ObjectNode) result).put("event", getEvent());
+		((ObjectNode) result).set("features", getFeatures().marshal());
+		
+		JsonNode locationsNode = objectMapper.createArrayNode();
+		for (String location : getLocations())
+			((ArrayNode) locationsNode).add(location);
+		((ObjectNode) result).set("locations", locationsNode);
+		
+		return result;
+	}
 }
