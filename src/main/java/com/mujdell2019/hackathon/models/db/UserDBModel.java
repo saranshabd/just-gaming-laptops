@@ -1,5 +1,8 @@
 package com.mujdell2019.hackathon.models.db;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
@@ -12,23 +15,32 @@ public class UserDBModel {
 	private String username;
 	private String name;
 	private String password;
+	private List<String> cart; // stores id of all products
 	
 	
 	/* Constructors */
 	
-	public UserDBModel() {}
+	public UserDBModel() { cart = new ArrayList<>(); }
 	
 	public UserDBModel(String username, String name, String password) {
+		this();
 		this.username = username;
 		this.name = name;
 		this.password = password;
+	}
+	
+	public UserDBModel(String username, String name, String password, List<String> cart) {
+		this.username = username;
+		this.name = name;
+		this.password = password;
+		this.cart = cart;
 	}
 	
 	public UserDBModel(String username) { this.username = username; }
 
 	
 	/* Getters and Setters */
-	
+
 	@DynamoDBHashKey(attributeName = "username")
 	public String getUsername() {return username; }
 	public void setUsername(String username) {this.username = username; }
@@ -40,4 +52,8 @@ public class UserDBModel {
 	@DynamoDBAttribute(attributeName = "password")
 	public String getPassword() { return password; }
 	public void setPassword(String password) { this.password = password; }
+	
+	@DynamoDBAttribute(attributeName = "cart")
+	public List<String> getCart() { return cart; }
+	public void setCart(List<String> cart) { this.cart = cart; }
 }
