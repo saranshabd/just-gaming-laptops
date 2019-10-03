@@ -4,7 +4,7 @@
 
 ## Authentication Routes
 
-- `~/api/user/auth/register`
+- POST `~/api/user/auth/register`
 	<br>
 	Register New User in Database.
 	
@@ -18,7 +18,7 @@
 	}
 	```
 	
-- `~/api/user/auth/login`
+- POST `~/api/user/auth/login`
 	<br>
 	Login Existing User
 	
@@ -31,7 +31,7 @@
 	}
 	```
 
-- `~/api/user/auth/signout`
+- POST `~/api/user/auth/signout`
 	<br>
 	Signout Existing User
 	
@@ -43,7 +43,7 @@
 	}
 	```
 
-- `~/api/user/auth/verify`
+- GET `~/api/user/auth/verify`
 	<br>
 	Check if username already exists
 	
@@ -52,5 +52,46 @@
   ```json
 	{
 		"username" : "<String>"
+	}
+	```
+	
+	
+## Cart Routes
+
+- GET `~/api/user/cart`
+	<br>
+	Get all products in user cart
+	
+	**Parameters**
+	
+  ```json
+	{
+		"username" : "<String>"
+	}
+	```
+
+- PUT `~/api/user/cart/item`
+	<br>
+	Add item to user cart
+	
+	**Parameters**
+	
+  ```json
+	{
+		"username"  : "<String>",
+		"productId" : "<String>"
+	}
+	```
+
+- DELETE `~/api/user/cart/item`
+	<br>
+	Delete item from user cart
+	
+	**Parameters**
+	
+  ```json
+	{
+		"username"  : "<String>",
+		"productId" : "<String>"
 	}
 	```
