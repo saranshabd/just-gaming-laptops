@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mujdell2019.hackathon.models.api.APIResponse;
-import com.mujdell2019.hackathon.models.db.DellProductDBModel;
-import com.mujdell2019.hackathon.models.db.product.ProductBasicFeaturesDBModel;
-import com.mujdell2019.hackathon.models.db.product.ProductDisplayFeaturesDBModel;
-import com.mujdell2019.hackathon.models.db.product.ProductFeaturesDBModel;
-import com.mujdell2019.hackathon.models.db.product.ProductRamFeaturesDBModel;
+import com.mujdell2019.hackathon.models.db.product.DellLaptopDBModel;
+import com.mujdell2019.hackathon.models.db.product.laptop.LaptopBasicFeaturesDBModel;
+import com.mujdell2019.hackathon.models.db.product.laptop.LaptopDisplayFeaturesDBModel;
+import com.mujdell2019.hackathon.models.db.product.laptop.LaptopFeaturesDBModel;
+import com.mujdell2019.hackathon.models.db.product.laptop.LaptopRamFeaturesDBModel;
 import com.mujdell2019.hackathon.request.handler.DevelopmentRequestHandler;
 
 /**

@@ -1,4 +1,4 @@
-package com.mujdell2019.hackathon.models.db.product;
+package com.mujdell2019.hackathon.models.db.product.laptop;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mujdell2019.hackathon.models.IMarshal;
 
 @DynamoDBDocument
-public class ProductBasicFeaturesDBModel implements IMarshal {
+public class LaptopBasicFeaturesDBModel implements IMarshal {
 
 	/* Data Members */
 	
@@ -18,9 +18,9 @@ public class ProductBasicFeaturesDBModel implements IMarshal {
 	
 	/* Constructors */
 	
-	public ProductBasicFeaturesDBModel() {}
+	public LaptopBasicFeaturesDBModel() {}
 	
-	public ProductBasicFeaturesDBModel(int storage, String cpu) {
+	public LaptopBasicFeaturesDBModel(int storage, String cpu) {
 		this.storage = storage;
 		this.cpu = cpu;
 	}

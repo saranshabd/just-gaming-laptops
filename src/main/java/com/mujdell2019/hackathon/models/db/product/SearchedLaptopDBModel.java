@@ -1,4 +1,4 @@
-package com.mujdell2019.hackathon.models.db;
+package com.mujdell2019.hackathon.models.db.product;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -8,10 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mujdell2019.hackathon.models.IMarshal;
 import com.mujdell2019.hackathon.models.UserEvents;
-import com.mujdell2019.hackathon.models.db.product.ProductFeaturesDBModel;
+import com.mujdell2019.hackathon.models.db.product.laptop.LaptopFeaturesDBModel;
 
 @DynamoDBTable(tableName = "searchedProducts")
-public class SearchedProductDBModel implements IMarshal {
+public class SearchedLaptopDBModel implements IMarshal {
 	
 	/* Data Members */
 	
@@ -20,21 +20,21 @@ public class SearchedProductDBModel implements IMarshal {
 	private String lastSearched;
 	private int price;
 	private UserEvents event; // e.g. item added to cart, item bought, item clicked, etc
-	private ProductFeaturesDBModel features;
+	private LaptopFeaturesDBModel features;
 	
 	
 	/* Constructors */
 	
-	public SearchedProductDBModel() {
-		features = new ProductFeaturesDBModel();
+	public SearchedLaptopDBModel() {
+		features = new LaptopFeaturesDBModel();
 	}
 	
-	public SearchedProductDBModel(String userId) {
+	public SearchedLaptopDBModel(String userId) {
 		this();
 		this.userId = userId;
 	}
 
-	public SearchedProductDBModel(String userId, int frequency, String lastSearched, int price, UserEvents event, ProductFeaturesDBModel features) {
+	public SearchedLaptopDBModel(String userId, int frequency, String lastSearched, int price, UserEvents event, LaptopFeaturesDBModel features) {
 		this.userId = userId;
 		this.frequency = frequency;
 		this.lastSearched = lastSearched;
@@ -67,8 +67,8 @@ public class SearchedProductDBModel implements IMarshal {
 	public void setEvent(UserEvents event) { this.event = event; }
 
 	@DynamoDBAttribute(attributeName = "features")
-	public ProductFeaturesDBModel getFeatures() { return features; }
-	public void setFeatures(ProductFeaturesDBModel features) { this.features = features; }
+	public LaptopFeaturesDBModel getFeatures() { return features; }
+	public void setFeatures(LaptopFeaturesDBModel features) { this.features = features; }
 	
 	
 	/* JSON Marshal Method */

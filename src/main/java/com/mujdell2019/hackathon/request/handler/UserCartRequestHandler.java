@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mujdell2019.hackathon.dao.DellProductDAO;
 import com.mujdell2019.hackathon.dao.UserDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
-import com.mujdell2019.hackathon.models.db.DellProductDBModel;
+import com.mujdell2019.hackathon.models.db.product.DellLaptopDBModel;
 
 @Component
 @Scope("singleton")
@@ -28,7 +28,7 @@ public class UserCartRequestHandler {
 	public APIResponse getAllCartProductFromCart(String username) {
 		
 		// get all items from user cart
-		List<DellProductDBModel> cartItems = userDAO.getAllItemFromCart(username);
+		List<DellLaptopDBModel> cartItems = userDAO.getAllItemFromCart(username);
 		
 		
 		// parse response data into JSON format
@@ -37,7 +37,7 @@ public class UserCartRequestHandler {
 		JsonNode response = objectMapper.createObjectNode();
 		
 		JsonNode cartItemsNode = objectMapper.createArrayNode();
-		for (DellProductDBModel item : cartItems)
+		for (DellLaptopDBModel item : cartItems)
 			((ArrayNode) cartItemsNode).add(item.marshal());
 		
 		((ObjectNode) response).set("cart", cartItemsNode);

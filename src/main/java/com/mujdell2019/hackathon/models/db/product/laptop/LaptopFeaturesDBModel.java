@@ -1,4 +1,4 @@
-package com.mujdell2019.hackathon.models.db.product;
+package com.mujdell2019.hackathon.models.db.product.laptop;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
@@ -8,24 +8,24 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mujdell2019.hackathon.models.IMarshal;
 
 @DynamoDBDocument
-public class ProductFeaturesDBModel implements IMarshal {
+public class LaptopFeaturesDBModel implements IMarshal {
 
 	/* Data Members */
 
-	private ProductBasicFeaturesDBModel basic;
-	private ProductRamFeaturesDBModel ram;
-	private ProductDisplayFeaturesDBModel display;
+	private LaptopBasicFeaturesDBModel basic;
+	private LaptopRamFeaturesDBModel ram;
+	private LaptopDisplayFeaturesDBModel display;
 	
 	
 	/* Constructors */
 	
-	public ProductFeaturesDBModel() {
-		basic = new ProductBasicFeaturesDBModel();
-		ram = new ProductRamFeaturesDBModel();
-		display = new ProductDisplayFeaturesDBModel();
+	public LaptopFeaturesDBModel() {
+		basic = new LaptopBasicFeaturesDBModel();
+		ram = new LaptopRamFeaturesDBModel();
+		display = new LaptopDisplayFeaturesDBModel();
 	}
 	
-	public ProductFeaturesDBModel(ProductBasicFeaturesDBModel basic, ProductRamFeaturesDBModel ram, ProductDisplayFeaturesDBModel display) {
+	public LaptopFeaturesDBModel(LaptopBasicFeaturesDBModel basic, LaptopRamFeaturesDBModel ram, LaptopDisplayFeaturesDBModel display) {
 		this.basic = basic;
 		this.ram = ram;
 		this.display = display;
@@ -35,16 +35,16 @@ public class ProductFeaturesDBModel implements IMarshal {
 	/* Getters and Setters */
 	
 	@DynamoDBAttribute(attributeName = "basic")
-	public ProductBasicFeaturesDBModel getBasic() { return basic; }
-	public void setBasic(ProductBasicFeaturesDBModel basic) { this.basic = basic; }
+	public LaptopBasicFeaturesDBModel getBasic() { return basic; }
+	public void setBasic(LaptopBasicFeaturesDBModel basic) { this.basic = basic; }
 
 	@DynamoDBAttribute(attributeName = "ram")
-	public ProductRamFeaturesDBModel getRam() { return ram; }
-	public void setRam(ProductRamFeaturesDBModel ram) { this.ram = ram; }
+	public LaptopRamFeaturesDBModel getRam() { return ram; }
+	public void setRam(LaptopRamFeaturesDBModel ram) { this.ram = ram; }
 
 	@DynamoDBAttribute(attributeName = "display")
-	public ProductDisplayFeaturesDBModel getDisplay() { return display; }
-	public void setDisplay(ProductDisplayFeaturesDBModel display) { this.display = display; }
+	public LaptopDisplayFeaturesDBModel getDisplay() { return display; }
+	public void setDisplay(LaptopDisplayFeaturesDBModel display) { this.display = display; }
 	
 	
 	/* JSON Marshal Method */
