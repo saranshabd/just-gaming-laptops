@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
+import com.mujdell2019.hackathon.models.db.ProductType;
 import com.mujdell2019.hackathon.request.handler.DevelopmentRequestHandler;
 
 /**
@@ -50,6 +51,9 @@ public class DevelopmentRequestBroker {
 				dellProduct.setImageUrl(product.get("image").asText());
 				dellProduct.setPrice(product.get("price").asInt());
 				dellProduct.setDiscount(product.get("Disount").asInt());
+				
+				// product type
+				dellProduct.setProductType(ProductType.LAPTOP.name());
 				
 				// features
 				dellProduct.getFeatures().put("cpu", product.get("cpu").asText());
