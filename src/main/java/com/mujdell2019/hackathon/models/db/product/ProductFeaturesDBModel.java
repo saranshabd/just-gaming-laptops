@@ -15,7 +15,6 @@ public class ProductFeaturesDBModel implements IMarshal {
 	private ProductBasicFeaturesDBModel basic;
 	private ProductRamFeaturesDBModel ram;
 	private ProductDisplayFeaturesDBModel display;
-	private ProductGraphicCardFeaturesDBModel graphicCard;
 	
 	
 	/* Constructors */
@@ -24,14 +23,12 @@ public class ProductFeaturesDBModel implements IMarshal {
 		basic = new ProductBasicFeaturesDBModel();
 		ram = new ProductRamFeaturesDBModel();
 		display = new ProductDisplayFeaturesDBModel();
-		graphicCard = new ProductGraphicCardFeaturesDBModel();
 	}
 	
-	public ProductFeaturesDBModel(ProductBasicFeaturesDBModel basic, ProductRamFeaturesDBModel ram, ProductDisplayFeaturesDBModel display, ProductGraphicCardFeaturesDBModel graphicCard) {
+	public ProductFeaturesDBModel(ProductBasicFeaturesDBModel basic, ProductRamFeaturesDBModel ram, ProductDisplayFeaturesDBModel display) {
 		this.basic = basic;
 		this.ram = ram;
 		this.display = display;
-		this.graphicCard = graphicCard;
 	}
 	
 	
@@ -48,10 +45,6 @@ public class ProductFeaturesDBModel implements IMarshal {
 	@DynamoDBAttribute(attributeName = "display")
 	public ProductDisplayFeaturesDBModel getDisplay() { return display; }
 	public void setDisplay(ProductDisplayFeaturesDBModel display) { this.display = display; }
-
-	@DynamoDBAttribute(attributeName = "graphicCard")
-	public ProductGraphicCardFeaturesDBModel getGraphicCard() { return graphicCard; }
-	public void setGraphicCard(ProductGraphicCardFeaturesDBModel graphicCard) { this.graphicCard = graphicCard; }
 	
 	
 	/* JSON Marshal Method */
@@ -65,7 +58,6 @@ public class ProductFeaturesDBModel implements IMarshal {
 		((ObjectNode) result).set("basic", getBasic().marshal());
 		((ObjectNode) result).set("ram", getRam().marshal());
 		((ObjectNode) result).set("display", getDisplay().marshal());
-		((ObjectNode) result).set("graphicCard", getGraphicCard().marshal());
 		
 		return result;
 	}

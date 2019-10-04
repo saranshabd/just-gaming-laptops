@@ -14,19 +14,15 @@ public class ProductBasicFeaturesDBModel implements IMarshal {
 	
 	private int storage;
 	private String cpu;
-	private String audioType;
-	private int battery;
 	
 	
 	/* Constructors */
 	
 	public ProductBasicFeaturesDBModel() {}
 	
-	public ProductBasicFeaturesDBModel(int storage, String cpu, String audioType, int battery) {
+	public ProductBasicFeaturesDBModel(int storage, String cpu) {
 		this.storage = storage;
 		this.cpu = cpu;
-		this.audioType = audioType;
-		this.battery = battery;
 	}
 	
 	
@@ -39,14 +35,6 @@ public class ProductBasicFeaturesDBModel implements IMarshal {
 	@DynamoDBAttribute(attributeName = "cpu")
 	public String getCpu() { return cpu; }
 	public void setCpu(String cpu) { this.cpu = cpu; }
-
-	@DynamoDBAttribute(attributeName = "audioType")
-	public String getAudioType() { return audioType; }
-	public void setAudioType(String audioType) { this.audioType = audioType; }
-
-	@DynamoDBAttribute(attributeName = "battery")
-	public int getBattery() { return battery; }
-	public void setBattery(int battery) { this.battery = battery; }
 	
 	
 	/* JSON Marshal Method */
@@ -59,8 +47,6 @@ public class ProductBasicFeaturesDBModel implements IMarshal {
 		
 		((ObjectNode) result).put("storage", getStorage());
 		((ObjectNode) result).put("cpu", getCpu());
-		((ObjectNode) result).put("audioType", getAudioType());
-		((ObjectNode) result).put("battery", getBattery());
 		
 		return result;
 	}
