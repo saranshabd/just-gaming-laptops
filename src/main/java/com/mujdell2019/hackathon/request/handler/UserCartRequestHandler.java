@@ -72,6 +72,8 @@ public class UserCartRequestHandler {
 		if (!userDAO.checkProductInCart(username, productId))
 			return new APIResponse("item not present in cart", HttpStatus.BAD_REQUEST, null);
 		
+		userDAO.deleteFromCart(username, productId);
+		
 		return new APIResponse("item deleted from cart", HttpStatus.OK, null);
 	}
 }

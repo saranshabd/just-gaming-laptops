@@ -53,27 +53,28 @@ public class DellProductDAO {
 	 * load multiple dell products by their respective product id
 	 * */
 	public List<DellProductDBModel> getProducts(List<String> ids) {
-	
+		
 		// load products from DB
 		
-		List<DellProductDBModel> products = new ArrayList<>(ids.size());
-		for (int i = 0; i < ids.size(); ++i)
-			products.add(i, new DellProductDBModel(ids.get(i)));
+		List<DellProductDBModel> products = new ArrayList<>();
+		for (String id : ids)
+			products.add(new DellProductDBModel(id));
 	
 		Map<String, List<Object>> dbResponse = dynamoDBUtil.getDynamoDBMapper().batchLoad(products);
 		
 		
 		// parse DB response
 	
+		List<DellProductDBModel> result = new ArrayList<>();
 		for (String tableName : dbResponse.keySet())
 	
 			// since items are only loaded from dell products table,
 			// there is only one key in DB response object
 			
-			for (int i = 0; i < dbResponse.get(tableName).size(); ++i)
-				products.add(i, (DellProductDBModel) dbResponse.get(tableName).get(i));
+			for (Object item : dbResponse.get(tableName))
+				result.add((DellProductDBModel) item);
 		
-		return products;
+		return result;
 	}
 	
 	/**

@@ -53,7 +53,7 @@ public class DevelopmentRequestBroker {
 				dellProduct.setDiscount(product.get("Disount").asInt());
 				
 				// product type
-				dellProduct.setProductType(ProductType.LAPTOP.name());
+				dellProduct.setProductType(ProductType.LAPTOP);
 				
 				// features
 				dellProduct.getFeatures().put("cpu", product.get("cpu").asText());

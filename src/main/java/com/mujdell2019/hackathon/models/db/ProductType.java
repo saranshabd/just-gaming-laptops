@@ -3,7 +3,7 @@ package com.mujdell2019.hackathon.models.db;
 /**
  * type of products being stored in DB
  * */
-public enum ProductType {
+public class ProductType {
 
-	LAPTOP,
+	public final static String LAPTOP = "LAPTOP";
 }
