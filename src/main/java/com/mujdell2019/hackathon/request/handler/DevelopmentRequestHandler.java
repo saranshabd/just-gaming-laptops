@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.mujdell2019.hackathon.dao.DellProductDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
-import com.mujdell2019.hackathon.models.db.product.DellLaptopDBModel;
+import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 
 /**
  * NOTE

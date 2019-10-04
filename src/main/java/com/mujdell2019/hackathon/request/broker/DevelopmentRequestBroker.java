@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mujdell2019.hackathon.models.api.APIResponse;
-import com.mujdell2019.hackathon.models.db.product.DellLaptopDBModel;
-import com.mujdell2019.hackathon.models.db.product.laptop.LaptopBasicFeaturesDBModel;
-import com.mujdell2019.hackathon.models.db.product.laptop.LaptopDisplayFeaturesDBModel;
-import com.mujdell2019.hackathon.models.db.product.laptop.LaptopFeaturesDBModel;
-import com.mujdell2019.hackathon.models.db.product.laptop.LaptopRamFeaturesDBModel;
+import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.request.handler.DevelopmentRequestHandler;
 
 /**
@@ -38,9 +34,9 @@ public class DevelopmentRequestBroker {
 	
 	/*@Autowired
 	private DevelopmentRequestHandler requestHandler;
-
-	@PostMapping("/dell/products")
-	public ResponseEntity<APIResponse> addDellProducts(@RequestBody JsonNode requestBody) {
+	
+	@PostMapping("/dell/laptop/multiple")
+	public ResponseEntity<APIResponse> addDellMultipleLaptops(@RequestBody JsonNode requestBody) {
 		
 		try {
 			ArrayNode productNodes = (ArrayNode) requestBody.get("products");
@@ -49,34 +45,20 @@ public class DevelopmentRequestBroker {
 			for (JsonNode product : productNodes) {
 				DellProductDBModel dellProduct = new DellProductDBModel();
 				
-				// basic product features
+				// basic attributes
 				dellProduct.setName(product.get("name").asText());
 				dellProduct.setImageUrl(product.get("image").asText());
 				dellProduct.setPrice(product.get("price").asInt());
 				dellProduct.setDiscount(product.get("Disount").asInt());
 				
-				ProductFeaturesDBModel features = new ProductFeaturesDBModel();
-				
-				// product basic features
-				ProductBasicFeaturesDBModel productBasic = new ProductBasicFeaturesDBModel();
-				productBasic.setCpu(product.get("cpu").asText());
-				productBasic.setStorage(product.get("storage").asInt());
-				
-				// product ram features
-				ProductRamFeaturesDBModel productRam = new ProductRamFeaturesDBModel();
-				productRam.setSize(product.get("ram_size").asInt());
-				productRam.setType(product.get("ram_type").asText());
-				
-				// product display features
-				ProductDisplayFeaturesDBModel productDisplay = new ProductDisplayFeaturesDBModel();
-				productDisplay.setFps(product.get("display_fps").asInt());
-				productDisplay.setSize(product.get("display_size").asInt());
-				productDisplay.setType(product.get("display_type").asText());
-				
-				features.setBasic(productBasic);
-				features.setRam(productRam);
-				features.setDisplay(productDisplay);
-				dellProduct.setFeatures(features);
+				// features
+				dellProduct.getFeatures().put("cpu", product.get("cpu").asText());
+				dellProduct.getFeatures().put("storage", Integer.toString(product.get("storage").asInt()));
+				dellProduct.getFeatures().put("ram_size", Integer.toString(product.get("ram_size").asInt()));
+				dellProduct.getFeatures().put("ram_type", product.get("ram_type").asText());
+				dellProduct.getFeatures().put("display_fps", Integer.toString(product.get("display_fps").asInt()));
+				dellProduct.getFeatures().put("display_size", Integer.toString(product.get("display_type").asInt()));
+				dellProduct.getFeatures().put("display_type", product.get("display_type").asText());
 				
 				dellProducts.add(dellProduct);
 			}

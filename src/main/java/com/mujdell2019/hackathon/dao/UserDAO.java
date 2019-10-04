@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.models.db.UserDBModel;
-import com.mujdell2019.hackathon.models.db.product.DellLaptopDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 import com.mujdell2019.hackathon.utils.EncryptionUtils;
 
@@ -128,13 +128,13 @@ public class UserDAO {
 	/**
 	 * get all products from user cart
 	 * */
-	public List<DellLaptopDBModel> getAllItemFromCart(String username) {
+	public List<DellProductDBModel> getAllItemFromCart(String username) {
 		
 		// load product id of all items in user cart
 		List<String> itemsProductId = getAllItemProductIdsFromCart(username);
 		
 		// load product information of all the product ids
-		List<DellLaptopDBModel> result = dellProductDAO.getProducts(itemsProductId);
+		List<DellProductDBModel> result = dellProductDAO.getProducts(itemsProductId);
 		
 		return result;
 	}

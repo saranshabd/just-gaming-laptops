@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.mujdell2019.hackathon.models.db.product.SearchedLaptopDBModel;
+import com.mujdell2019.hackathon.models.db.SearchedProductDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 
 @Component
@@ -23,15 +23,15 @@ public class SearchedProductDAO {
 	/**
 	 * load single searched product from DB based on searched query
 	 * */
-	public SearchedLaptopDBModel getProduct(String searchQuery) {
+	public SearchedProductDBModel getProduct(String searchQuery) {
 		
-		return dynamoDBUtil.getDynamoDBMapper().load(SearchedLaptopDBModel.class, searchQuery);
+		return dynamoDBUtil.getDynamoDBMapper().load(SearchedProductDBModel.class, searchQuery);
 	}
 	
 	/**
 	 * load multiple searched products from DB based on their respective searched queries
 	 * */
-	public List<SearchedLaptopDBModel> getProducts(List<String> searchQueries) {
+	public List<SearchedProductDBModel> getProducts(List<String> searchQueries) {
 		
 		// load products from DB
 		Map<String, List<Object>> dbResponse = dynamoDBUtil.getDynamoDBMapper().batchLoad(searchQueries);
@@ -39,7 +39,7 @@ public class SearchedProductDAO {
 		
 		// parse DB response
 		
-		List<SearchedLaptopDBModel> result = new ArrayList<>();
+		List<SearchedProductDBModel> result = new ArrayList<>();
 	
 		for (String tableName : dbResponse.keySet())
 	
@@ -47,7 +47,7 @@ public class SearchedProductDAO {
 			// there is only one key in DB response object
 			
 			for (Object curr : dbResponse.get(tableName))
-				result.add((SearchedLaptopDBModel) curr);
+				result.add((SearchedProductDBModel) curr);
 		
 		return result;
 	}
@@ -55,8 +55,8 @@ public class SearchedProductDAO {
 	/**
 	 * load all searched products from DB
 	 * */
-	public List<SearchedLaptopDBModel> getAll() {
+	public List<SearchedProductDBModel> getAll() {
 		
-		return dynamoDBUtil.getDynamoDBMapper().scan(SearchedLaptopDBModel.class, new DynamoDBScanExpression());
+		return dynamoDBUtil.getDynamoDBMapper().scan(SearchedProductDBModel.class, new DynamoDBScanExpression());
 	}
 }
