@@ -1,6 +1,7 @@
 package com.mujdell2019.hackathon.dao;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -83,5 +84,137 @@ public class DellProductDAO {
 	public List<DellProductDBModel> getAll() {
 
 		return dynamoDBUtil.getDynamoDBMapper().scan(DellProductDBModel.class, new DynamoDBScanExpression());
+	}
+	
+	/**
+	 * update clicked events count of a product by n
+	 * */
+	public void updateClickedEventsCount(String productId, int count) {
+		
+		// load dell product from DB
+		DellProductDBModel dellProduct = dynamoDBUtil.getDynamoDBMapper().load(DellProductDBModel.class, productId);
+		
+		// update product clicked count
+		dellProduct.setClickedCount(dellProduct.getClickedCount() + count);
+		
+		// upload the updated product
+		dynamoDBUtil.getDynamoDBMapper().save(dellProduct);
+	}
+	
+	/**
+	 * update add to cart events count of a product by n
+	 * */
+	public void updateAddToCartEventsCount(String productId, int count) {
+		
+		// load dell product from DB
+		DellProductDBModel dellProduct = dynamoDBUtil.getDynamoDBMapper().load(DellProductDBModel.class, productId);
+		
+		// update product added to cart count
+		dellProduct.setCartAddedCount(dellProduct.getCartAddedCount() + count);
+		
+		// upload the updated product
+		dynamoDBUtil.getDynamoDBMapper().save(dellProduct);
+	}
+	
+	/**
+	 * update delete from cart events count of a product by n
+	 * */
+	public void updateDeletedFromCartEventsCount(String productId, int count) {
+		
+		// load dell product from DB
+		DellProductDBModel dellProduct = dynamoDBUtil.getDynamoDBMapper().load(DellProductDBModel.class, productId);
+		
+		// update product delete from cart count
+		dellProduct.setCartDeletedCount(dellProduct.getCartDeletedCount() + count);
+		
+		// upload the updated product
+		dynamoDBUtil.getDynamoDBMapper().save(dellProduct);
+	}
+	
+	/**
+	 * update buy events count of a product by n
+	 * */
+	public void updateBuyEventsCount(String productId, int count) {
+		
+		// load dell product from DB
+		DellProductDBModel dellProduct = dynamoDBUtil.getDynamoDBMapper().load(DellProductDBModel.class, productId);
+		
+		// update product bought count
+		dellProduct.setBoughtCount(dellProduct.getBoughtCount() + count);
+		
+		// upload the updated product
+		dynamoDBUtil.getDynamoDBMapper().save(dellProduct);
+	}
+	
+	/**
+	 * get products with most bought events registered
+	 * */
+	public List<DellProductDBModel> getTopProducts(int count) {
+		
+		// load all dell products from DB
+		List<DellProductDBModel> products = getAll();
+		
+		// sort products based on total bought events count (descending order)
+		products.sort((DellProductDBModel p1, DellProductDBModel p2) -> p2.getBoughtCount() - p1.getBoughtCount());
+		
+		// create a list of top 'count' products
+		List<DellProductDBModel> result = new LinkedList<>();
+		for (int i = 0; i < products.size() && i < count; ++i)
+			result.add(products.get(i));
+		
+		return result;
+	}
+	
+	/**
+	 * get products with least bought events registered
+	 * <br>
+	 * */
+	public List<DellProductDBModel> getWorstProducts(int count) {
+		
+		// load all dell products from DB
+		List<DellProductDBModel> products = getAll();
+		
+		// sort products based on total bought events count (ascending order)
+		products.sort((DellProductDBModel p1, DellProductDBModel p2) -> p1.getBoughtCount() - p2.getBoughtCount());
+		
+		// create a list of top 'count' products
+		List<DellProductDBModel> result = new LinkedList<>();
+		for (int i = 0; i < products.size() && i < count; ++i)
+			result.add(products.get(i));
+		
+		return result;
+	}
+	
+	/**
+	 * get products with most view event counts
+	 * */
+	public List<DellProductDBModel> getTopViewedProducts(int count) {
+		
+		// load all dell products from DB
+		List<DellProductDBModel> products = getAll();
+		
+		// sort products based on total bought events count (descending order)
+		products.sort((DellProductDBModel p1, DellProductDBModel p2) -> p2.getClickedCount() - p1.getClickedCount());
+		
+		// create a list of top 'count' products
+		List<DellProductDBModel> result = new LinkedList<>();
+		for (int i = 0; i < products.size() && i < count; ++i)
+			result.add(products.get(i));
+		
+		return result;
+	}
+	
+	/**
+	 * get order conversion rate of a particular product
+	 * */
+	public double getOrderConversion(String productId) {
+		
+		// get dell product from DB
+		DellProductDBModel product = getProduct(productId);
+		
+		// calculate order conversion rate
+		double orderConversionRate = product.getBoughtCount() / product.getCartAddedCount();
+		
+		return orderConversionRate;
 	}
 }

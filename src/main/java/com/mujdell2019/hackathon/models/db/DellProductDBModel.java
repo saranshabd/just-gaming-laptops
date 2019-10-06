@@ -17,20 +17,26 @@ public class DellProductDBModel implements IMarshal {
 
 	/* Data Members */
 	
-	private String productId;
+	// product related fields
+	private String productId; // primary key
 	private String name;
 	private int price;
 	private String imageUrl;
 	private double discount;
-	private String productType;
+	private String productType; // global secondary index key
+	private String gpu;
 	private HashMap<String, String> features;
+	
+	// back-end analysis fields
+	private int clickedCount;
+	private int cartAddedCount;
+	private int cartDeletedCount;
+	private int boughtCount;
 	
 	
 	/* Constructors */
 	
-	public DellProductDBModel() {
-		features = new HashMap<>();
-	}
+	public DellProductDBModel() { features = new HashMap<>(); }
 	
 	public DellProductDBModel(String productId) {
 		this();
@@ -42,14 +48,25 @@ public class DellProductDBModel implements IMarshal {
 		this.productType = productType;
 	}
 	
-	public DellProductDBModel(String productId, String name, int price, String imageUrl, double discount, String productType, HashMap<String, String> features) {
+	public DellProductDBModel(String productId, 
+			String name, int price, 
+			String imageUrl, double discount, String gpu,
+			String productType, HashMap<String, String> features,
+			int clickedCount, int cartAddedCount, int cartDeletedCount, int boughtCount) {
+		
 		this.productId = productId;
 		this.name = name;
 		this.price = price;
 		this.imageUrl = imageUrl;
 		this.discount = discount;
 		this.productType = productType;
+		this.gpu = gpu;
 		this.features = features;
+		
+		this.clickedCount = clickedCount;
+		this.cartAddedCount = cartAddedCount;
+		this.cartDeletedCount = cartDeletedCount;
+		this.boughtCount = boughtCount;
 	}
 
 	
@@ -80,13 +97,33 @@ public class DellProductDBModel implements IMarshal {
 	public double getDiscount() { return discount; }
 	public void setDiscount(double discount) { this.discount = discount; }
 	
+	@DynamoDBAttribute(attributeName = "gpu")
+	public String getGpu() { return gpu; }
+	public void setGpu(String gpu) { this.gpu = gpu; }
+
 	@DynamoDBAttribute(attributeName = "features")
 	public HashMap<String, String> getFeatures() { return features; }
 	public void setFeatures(HashMap<String, String> features) { this.features = features; }
 	
+	@DynamoDBAttribute(attributeName = "clickedCount")
+	public int getClickedCount() { return clickedCount; }
+	public void setClickedCount(int clickedCount) { this.clickedCount = clickedCount; }
+
+	@DynamoDBAttribute(attributeName = "cartAddedCount")
+	public int getCartAddedCount() { return cartAddedCount; }
+	public void setCartAddedCount(int cartAddedCount) { this.cartAddedCount = cartAddedCount; }
+
+	@DynamoDBAttribute(attributeName = "cartDeletedCount")
+	public int getCartDeletedCount() { return cartDeletedCount; }
+	public void setCartDeletedCount(int cartDeletedCount) { this.cartDeletedCount = cartDeletedCount; }
+
+	@DynamoDBAttribute(attributeName = "boughtCount")
+	public int getBoughtCount() { return boughtCount; }
+	public void setBoughtCount(int boughtCount) { this.boughtCount = boughtCount; }
+	
 	
 	/* JSON Marshal Method */
-	
+
 	@Override
 	public JsonNode marshal() {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -105,6 +142,12 @@ public class DellProductDBModel implements IMarshal {
 		for (String key : getFeatures().keySet())
 			((ObjectNode) featuresNode).put(key, getFeatures().get(key));
 		((ObjectNode) result).set("features", featuresNode);
+		
+		// back-end analysis fields
+		((ObjectNode) result).put("clickedCount", getClickedCount());
+		((ObjectNode) result).put("cartAddedCount", getCartAddedCount());
+		((ObjectNode) result).put("cartDeletedCount", getCartDeletedCount());
+		((ObjectNode) result).put("boughtCount", getBoughtCount());
 		
 		return result;
 	}

@@ -25,10 +25,8 @@ public class UserDAO {
 	private DellProductDAO dellProductDAO;
 	
 	// configuration object for consistent reads from DB
-	private DynamoDBMapperConfig consistentReadConfig = DynamoDBMapperConfig
-														.builder()
-														.withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT)
-														.build();
+	private DynamoDBMapperConfig consistentReadConfig = DynamoDBMapperConfig.builder()
+			.withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT).build();
 	
 	/**
 	 * check in DB whether user already exists with given user-name
