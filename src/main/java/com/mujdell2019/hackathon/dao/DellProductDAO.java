@@ -217,4 +217,12 @@ public class DellProductDAO {
 		
 		return orderConversionRate;
 	}
+	
+	/**
+	 * update all Dell products in DB
+	 * */
+	public void updateProducts(List<DellProductDBModel> products) {
+
+		dynamoDBUtil.getDynamoDBMapper().batchSave(products);
+	}
 }
