@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.request.handler.UserAuthRequestHandler;
+import com.mujdell2019.hackathon.utils.ExceptionUtils;
 import com.mujdell2019.hackathon.utils.StringUtils;
 
 @RestController
@@ -22,6 +23,8 @@ public class UserAuthRequestBroker {
 
 	@Autowired
 	private UserAuthRequestHandler requestHandler;
+	@Autowired
+	private ExceptionUtils exceptionUtils;
 	
 	@Autowired
 	private StringUtils stringUtils;
@@ -54,12 +57,7 @@ public class UserAuthRequestBroker {
 			APIResponse response = requestHandler.registerNewUser(username, name, password);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@PostMapping("/login")
@@ -88,12 +86,7 @@ public class UserAuthRequestBroker {
 			APIResponse response = requestHandler.loginExistingUser(username, password);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@PostMapping("/signout")
@@ -120,12 +113,7 @@ public class UserAuthRequestBroker {
 			APIResponse response = requestHandler.signoutExistingUser(username);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@GetMapping("/verify")
@@ -152,11 +140,6 @@ public class UserAuthRequestBroker {
 			APIResponse response = requestHandler.verifyExistingUser(username);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse response = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(response, response.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 }

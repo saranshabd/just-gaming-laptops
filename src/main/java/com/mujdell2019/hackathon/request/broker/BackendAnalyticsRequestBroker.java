@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.request.handler.BackendAnalyticsRequestHandler;
+import com.mujdell2019.hackathon.utils.ExceptionUtils;
 import com.mujdell2019.hackathon.utils.StringUtils;
 
 @RestController
@@ -22,6 +23,8 @@ public class BackendAnalyticsRequestBroker {
 	private BackendAnalyticsRequestHandler requestHandler;
 	@Autowired
 	private StringUtils stringUtils;
+	@Autowired
+	private ExceptionUtils exceptionUtils;
 	
 	
 	@PutMapping("/event/click")
@@ -45,12 +48,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.registerClickEvent(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@PutMapping("/event/cart/add")
@@ -74,12 +72,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.registerAddToCartEvent(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 
 	@PutMapping("/event/cart/delete")
@@ -103,12 +96,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.registerDeleteFromCartEvent(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 
 	@PutMapping("/event/buy")
@@ -132,12 +120,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.registerBuyEvent(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@GetMapping("/product/top/buy")
@@ -156,12 +139,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.topProducts(count);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@GetMapping("/product/worst/buy")
@@ -180,12 +158,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.worstProducts(count);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@GetMapping("/product/top/view")
@@ -204,12 +177,7 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.topViewedProducts(count);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	@GetMapping("/order-conversion-rate")
@@ -233,11 +201,6 @@ public class BackendAnalyticsRequestBroker {
 			APIResponse response = requestHandler.orderConversionRate(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 }

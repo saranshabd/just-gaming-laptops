@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.request.handler.UserCartRequestHandler;
+import com.mujdell2019.hackathon.utils.ExceptionUtils;
 import com.mujdell2019.hackathon.utils.StringUtils;
 
 @RestController
@@ -25,6 +26,8 @@ public class UserCartRequestBroker {
 	private StringUtils stringUtils;
 	@Autowired
 	private UserCartRequestHandler requestHandler;
+	@Autowired
+	private ExceptionUtils exceptionUtils;
 
 	/**
 	 * get all products from cart
@@ -53,12 +56,7 @@ public class UserCartRequestBroker {
 			APIResponse response = requestHandler.getAllCartProductFromCart(username);
 			return new ResponseEntity<>(response, response.getStatus());
 		
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	/**
@@ -90,12 +88,7 @@ public class UserCartRequestBroker {
 			APIResponse response = requestHandler.addItemToCart(username, productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
 	/**
@@ -127,11 +120,6 @@ public class UserCartRequestBroker {
 			APIResponse response = requestHandler.deleteItemFromCart(username, productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			APIResponse errorResponse = new APIResponse("internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
-			return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-		}
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 }
