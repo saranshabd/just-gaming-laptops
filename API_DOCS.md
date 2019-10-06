@@ -58,7 +58,8 @@
 		"username" : "<String>"
 	}
 	```
-	
+
+<br>
 	
 ## Cart Routes
 
@@ -100,5 +101,113 @@
 	{
 		"username"  : "<String>",
 		"productId" : "<String>"
+	}
+	```
+
+<br>
+
+## Backend Analytics Routes
+
+- *PUT* `~/api/analytics/event/click`
+	<br>
+	
+	Register an event when user clicks on a product
+	
+	**Parameters**
+	
+	```json
+	{
+		"productId": "<String>"
+	}
+	```
+
+- *PUT* `~/api/analytics/event/cart/add`
+	<br>
+	
+	Register an event when user adds an item to cart
+	
+	**Parameters**
+	
+	```json
+	{
+		"productId": "<String>"
+	}
+	```
+
+- *PUT* `~/api/analytics/event/cart/delete`
+	<br>
+	
+	Register an event when user deletes an item from cart
+	
+	**Parameters**
+	
+	```json
+	{
+		"productId": "<String>"
+	}
+	```
+
+- *PUT* `~/api/analytics/event/buy`
+	<br>
+	
+	Register an event when user buys a product
+	
+	**Parameters**
+	
+	```json
+	{
+		"productId": "<String>"
+	}
+	```
+
+- *GET* `~/api/analytics/product/top/buy`
+	<br>
+	
+	Get top bought Dell products
+	
+	**Parameters**
+	
+	```json
+	{
+		"count": "<Integer>"
+	}
+	```
+
+- *GET* `~/api/analytics/product/worst/buy`
+	<br>
+	
+	Get least bought Dell products
+	
+	**Parameters**
+	
+	```json
+	{
+		"count": "<Integer>"
+	}
+	```
+
+- *GET* `~/api/analytics/product/top/view`
+	<br>
+	
+	Get top viewed Dell products
+	
+	**Parameters**
+	
+	```json
+	{
+		"count": "<Integer>"
+	}
+	```
+
+- *GET* `~/api/analytics/order-conversion-rate`
+	<br>
+	
+	Get order conversion rate of a particular Dell product
+	
+	**Parameters**
+	
+	```json
+	{
+		"productId": "<String>"
 	}
 	```
