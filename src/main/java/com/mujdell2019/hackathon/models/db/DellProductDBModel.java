@@ -22,7 +22,6 @@ public class DellProductDBModel implements IMarshal {
 	private String name;
 	private int price;
 	private String imageUrl;
-	private double discount;
 	private String productType; // global secondary index key
 	private String gpu;
 	private HashMap<String, String> features;
@@ -33,9 +32,14 @@ public class DellProductDBModel implements IMarshal {
 	private int cartDeletedCount;
 	private int boughtCount;
 	
+	// dynamic sale fields
+	private boolean isInSale;
+	private double discount;
+	private int saleBuyCount;
+	
 	
 	/* Constructors */
-	
+
 	public DellProductDBModel() { features = new HashMap<>(); }
 	
 	public DellProductDBModel(String productId) {
@@ -51,6 +55,7 @@ public class DellProductDBModel implements IMarshal {
 	public DellProductDBModel(String productId, 
 			String name, int price, 
 			String imageUrl, double discount, String gpu,
+			boolean isInSale, int saleBuyCount,
 			String productType, HashMap<String, String> features,
 			int clickedCount, int cartAddedCount, int cartDeletedCount, int boughtCount) {
 		
@@ -62,6 +67,8 @@ public class DellProductDBModel implements IMarshal {
 		this.productType = productType;
 		this.gpu = gpu;
 		this.features = features;
+		this.isInSale = isInSale;
+		this.saleBuyCount = saleBuyCount;
 		
 		this.clickedCount = clickedCount;
 		this.cartAddedCount = cartAddedCount;
@@ -121,6 +128,14 @@ public class DellProductDBModel implements IMarshal {
 	public int getBoughtCount() { return boughtCount; }
 	public void setBoughtCount(int boughtCount) { this.boughtCount = boughtCount; }
 	
+	@DynamoDBAttribute(attributeName = "isInSale")
+	public boolean isInSale() { return isInSale; }
+	public void setInSale(boolean isInSale) { this.isInSale = isInSale; }
+
+	@DynamoDBAttribute(attributeName = "saleBuyCount")
+	public int getSaleBuyCount() { return saleBuyCount; }
+	public void setSaleBuyCount(int saleBuyCount) { this.saleBuyCount = saleBuyCount; }
+	
 	
 	/* JSON Marshal Method */
 
@@ -136,6 +151,8 @@ public class DellProductDBModel implements IMarshal {
 		((ObjectNode) result).put("imageUrl", getImageUrl());
 		((ObjectNode) result).put("discount", getDiscount());
 		((ObjectNode) result).put("productType", getProductType());
+		((ObjectNode) result).put("isInSale", isInSale());
+		((ObjectNode) result).put("saleBuyCount", getSaleBuyCount());
 		
 		// features
 		JsonNode featuresNode = objectMapper.createObjectNode();
