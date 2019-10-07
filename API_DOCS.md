@@ -211,3 +211,39 @@
 		"productId": "<String>"
 	}
 	```
+
+<br>
+
+## Dynamic Sale Routes
+
+- *GET* `~/api/sale`
+	<br>
+	
+	Get sale fields
+	
+	**Parameters**
+	`None`
+
+- *PUT* `~/api/sale`
+	<br>
+	
+	Set sale fields
+	
+	**Parameters**
+	```json
+	{
+		"saleDays": "<Integer>",
+		"saleDiscount": "<Double>"
+	}
+	```
+
+- *PUT* `~/api/sale/status`
+
+	Set sale status for current/upcoming month
+	
+	**Parameters**
+	```json
+	{
+		"saleStatus": "<Boolean>"
+	}
+	```
