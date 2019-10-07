@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
+import com.mujdell2019.hackathon.models.db.UserActivityDBModel;
 import com.mujdell2019.hackathon.models.db.UserDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 import com.mujdell2019.hackathon.utils.EncryptionUtils;
@@ -36,8 +37,7 @@ public class UserDAO {
 		// search for user with given user-name in DB
 		UserDBModel user = new UserDBModel(username);
 		DynamoDBQueryExpression<UserDBModel> queryExpression = new DynamoDBQueryExpression<UserDBModel>()
-																	.withConsistentRead(true)
-																	.withHashKeyValues(user);
+				.withConsistentRead(true).withHashKeyValues(user);
 
 		return 0 != dynamoDBUtil.getDynamoDBMapper().count(UserDBModel.class, queryExpression);
 	}
@@ -53,6 +53,10 @@ public class UserDAO {
 		// store user in DB
 		UserDBModel user = new UserDBModel(username, name, hashPassword);
 		dynamoDBUtil.getDynamoDBMapper().save(user);
+		
+		// create user activity
+		UserActivityDBModel userActivity = new UserActivityDBModel(username);
+		dynamoDBUtil.getDynamoDBMapper().save(userActivity);
 	}
 	
 	/**

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mujdell2019.hackathon.dao.DellProductDAO;
+import com.mujdell2019.hackathon.dao.UserActivityDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 
@@ -21,41 +22,55 @@ public class BackendAnalyticsRequestHandler {
 
 	@Autowired
 	private DellProductDAO dellProductDAO;
+	@Autowired
+	private UserActivityDAO userActivityDAO;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
-	public APIResponse registerClickEvent(String productId) {
+	public APIResponse registerClickEvent(String username, String productId) {
 		
 		// update dell product clicked event count
 		dellProductDAO.updateClickedEventsCount(productId, 1);
+		
+		// update user activity
+		userActivityDAO.updateClickedEventCount(username, productId, 1);
 
 		return new APIResponse("event registered", HttpStatus.OK, null);
 	}
 	
-	public APIResponse registerAddToCartEvent(String productId) {
+	public APIResponse registerAddToCartEvent(String username, String productId) {
 		
 		// update dell product added to cart count
 		dellProductDAO.updateAddToCartEventsCount(productId, 1);
 		
+		// update user activity
+		userActivityDAO.updateCartAddedEventCount(username, productId, 1);
+		
 		return new APIResponse("event registered", HttpStatus.OK, null);
 	}
 	
-	public APIResponse registerDeleteFromCartEvent(String productId) {
+	public APIResponse registerDeleteFromCartEvent(String username, String productId) {
 		
 		// update dell product delete from cart count
 		dellProductDAO.updateDeletedFromCartEventsCount(productId, 1);
 		
+		// update user activity
+		userActivityDAO.updateCartDeletedEventCount(username, productId, 1);
+		
 		return new APIResponse("event registered", HttpStatus.OK, null);
 	}
 	
-	public APIResponse registerBuyEvent(String productId) {
+	public APIResponse registerBuyEvent(String username, String productId) {
 		
 		// update dell product buy event count
 		dellProductDAO.updateBuyEventsCount(productId, 1);
 		
+		// update user activity
+		userActivityDAO.updateBoughtEventCount(username, productId, 1);
+		
 		return new APIResponse("event registered", HttpStatus.OK, null);
 	}
-	
+
 	public APIResponse topProducts(int count) { // most bought products
 		
 		// get dell top products from DB

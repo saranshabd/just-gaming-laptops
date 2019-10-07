@@ -31,6 +31,20 @@ public class BackendAnalyticsRequestBroker {
 	public ResponseEntity<APIResponse> registerClickEvent(@RequestBody JsonNode requestBody) {
 		
 		try {
+			JsonNode usernameNode = requestBody.get("username");
+			if (null == usernameNode) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
+			String username = usernameNode.asText();
+			if (stringUtils.isEmpty(username)) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
 			JsonNode productIdNode = requestBody.get("productId");
 			if (null == productIdNode) {
 				// invalid arguments passed
@@ -45,7 +59,7 @@ public class BackendAnalyticsRequestBroker {
 				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
 			}
 			
-			APIResponse response = requestHandler.registerClickEvent(productId);
+			APIResponse response = requestHandler.registerClickEvent(username, productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
@@ -55,6 +69,20 @@ public class BackendAnalyticsRequestBroker {
 	public ResponseEntity<APIResponse> registerAddToCartEvent(@RequestBody JsonNode requestBody) {
 		
 		try {
+			JsonNode usernameNode = requestBody.get("username");
+			if (null == usernameNode) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
+			String username = usernameNode.asText();
+			if (stringUtils.isEmpty(username)) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
 			JsonNode productIdNode = requestBody.get("productId");
 			if (null == productIdNode) {
 				// invalid arguments passed
@@ -69,7 +97,7 @@ public class BackendAnalyticsRequestBroker {
 				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
 			}
 			
-			APIResponse response = requestHandler.registerAddToCartEvent(productId);
+			APIResponse response = requestHandler.registerAddToCartEvent(username, productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
@@ -79,6 +107,20 @@ public class BackendAnalyticsRequestBroker {
 	public ResponseEntity<APIResponse> registerDeleteFromCartEvent(@RequestBody JsonNode requestBody) {
 	
 		try {
+			JsonNode usernameNode = requestBody.get("username");
+			if (null == usernameNode) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
+			String username = usernameNode.asText();
+			if (stringUtils.isEmpty(username)) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
 			JsonNode productIdNode = requestBody.get("productId");
 			if (null == productIdNode) {
 				// invalid arguments passed
@@ -93,7 +135,7 @@ public class BackendAnalyticsRequestBroker {
 				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
 			}
 			
-			APIResponse response = requestHandler.registerDeleteFromCartEvent(productId);
+			APIResponse response = requestHandler.registerDeleteFromCartEvent(username, productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
@@ -103,6 +145,20 @@ public class BackendAnalyticsRequestBroker {
 	public ResponseEntity<APIResponse> registerBuyEvent(@RequestBody JsonNode requestBody) {
 	
 		try {
+			JsonNode usernameNode = requestBody.get("username");
+			if (null == usernameNode) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
+			String username = usernameNode.asText();
+			if (stringUtils.isEmpty(username)) {
+				// invalid arguments passed
+				APIResponse errorResponse = new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
 			JsonNode productIdNode = requestBody.get("productId");
 			if (null == productIdNode) {
 				// invalid arguments passed
@@ -117,7 +173,7 @@ public class BackendAnalyticsRequestBroker {
 				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
 			}
 			
-			APIResponse response = requestHandler.registerBuyEvent(productId);
+			APIResponse response = requestHandler.registerBuyEvent(username, productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
