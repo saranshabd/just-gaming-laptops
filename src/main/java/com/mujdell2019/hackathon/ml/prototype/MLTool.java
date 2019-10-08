@@ -1,32 +1,86 @@
 import java.util.*;
 
-class MLTool {
-
-    class ScoredProduct implements Comparator<ScoredProduct>{
-        private String id;
-        private List<Integer> list;
-        private double score;
-        private boolean isSimilarRanked;
-        ScoredProduct(String id, List<Integer> list, double score, boolean isSimilarRanked) {
-            this.id = id;
-            this.list = list;
-            this.score = score;
-            this.isSimilarRanked = isSimilarRanked;
-        }
-
-        protected String getID() { return id; }
-        protected List<Integer> getList() { return list; }
-        protected double getScore() { return score; }
-
-        @Override public int compare(ScoredProduct x, ScoredProduct y) {
-            if(x.getScore() == y.getScore()) return 0;
-            if(x.getScore() < y.getScore()) return isSimilarRanked ? -1 : 1;
-            return isSimilarRanked ? 1 : -1;
-        }
+class ScoredProduct implements Comparable<ScoredProduct>{
+    private String id;
+    private List<Integer> list;
+    private double score;
+    private boolean isSimilarRanked;
+    ScoredProduct(String id, List<Integer> list, double score, boolean isSimilarRanked) {
+        this.id = id;
+        this.list = list;
+        this.score = score;
+        this.isSimilarRanked = !isSimilarRanked;
     }
 
-    
-   
+    protected String getID() { return id; }
+    protected List<Integer> getList() { return list; }
+    protected double getScore() { return score; }
+
+    @Override public int compareTo(ScoredProduct otherProduct) {
+        int diff = (int) (this.getScore()*1000 - otherProduct.getScore()*1000);
+        return isSimilarRanked ? -diff : diff;
+    }
+}
+
+class MLTool {
+
+    /*
+        Method: featureRankedList
+        returns a list of productIDs that are most similar to a given feature-vector
+        based on exactSimilarity
+
+        @param List<Integer> key: target feature vector
+        @param HashMap<String, List<Integer>> dataset: (PRODUCT_ID, FEATURE_VECTOR) map
+        @param int count: number of recommendations required
+        @param boolean isSimilarRanked: true if similar recommendations are needed
+    */
+    public List<String> featureRankedList(
+        List<Integer> key,
+        HashMap<String, List<Integer>> dataset,
+        int count,
+        boolean isSimilarRanked
+    ) {
+        ArrayList<ScoredProduct> orderedList = new ArrayList<ScoredProduct>();
+        ArrayList<String> res = new ArrayList<String>();
+
+        Iterator datasetIterator = dataset.entrySet().iterator();
+        while(datasetIterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) datasetIterator.next();
+            String pid = (String) pair.getKey();
+            List<Integer> list = (List<Integer>) pair.getValue();
+            double score = exactSimilarity(key, list);
+            ScoredProduct scoredProduct = new ScoredProduct(pid, list, score, isSimilarRanked);
+            orderedList.add(scoredProduct);
+        }
+
+        Collections.sort(orderedList);
+        for(int i=orderedList.size()-1, c=0; i>=0 && c<count;i--, c++)
+            res.add(orderedList.get(i).getID());
+        
+        return res;
+    }
+
+    /*
+        Method: similarToProduct
+        returns list of products that are most similar to the product
+        with given productID
+
+        @param String key: productID
+        @param HashMap<String, List<String>> dataset: source dataset
+        @param int count: number of recommendations expected
+        @param boolean isSimilarRanked: true if similar recommendations are needed
+        @return List<String>: list of product IDs
+    */
+    public List<String> similarToProduct(
+        String key,
+        HashMap<String, List<Integer>> dataset,
+        int count,
+        boolean isSimilarRanked
+    ) {
+        List<Integer> featureList = dataset.get(key);
+        return featureRankedList(featureList, dataset, count, isSimilarRanked);
+    }
+
     /*
         Method: contentFilteredList
         returns a list of product-IDs that are most similar
@@ -36,34 +90,32 @@ class MLTool {
         @param HaspMap<String, List<Integer>> dataset:
                 dataset of dell laptops; productID-featureList Map
         @param int count : the number of similar lists to be returned
-        @param boolean isSimilarRanked: true if similar products are needed, otherwise false
+        @param boolean isSimilarRanked: true if similar recommendations are needed
         @return List<String>: list of product IDs
     */
-    public List<String> contentFilteredList(
+    public List<String> cosineFilteredList(
         List<Integer> key,
         HashMap<String, List<Integer>> dataset,
         int count,
         boolean isSimilarRanked
     ) {
+        ArrayList<ScoredProduct> orderedList = new ArrayList<ScoredProduct>();
         ArrayList<String> res = new ArrayList<String>();
-        PriorityQueue<ScoredProduct> q = new PriorityQueue<ScoredProduct>(count);
-        
+
         Iterator datasetIterator = dataset.entrySet().iterator();
         while(datasetIterator.hasNext()) {
             Map.Entry pair = (Map.Entry) datasetIterator.next();
             String pid = (String) pair.getKey();
             List<Integer> list = (List<Integer>) pair.getValue();
             double score = cosineSimilarity(key, list);
-            q.add( new ScoredProduct(pid, list, score, isSimilarRanked) );
-            if(q.size() > count)
-                q.poll();
+            ScoredProduct scoredProduct = new ScoredProduct(pid, list, score, isSimilarRanked);
+            orderedList.add(scoredProduct);
         }
 
-        while(q.size()>0) {
-            ScoredProduct scoredProduct = (ScoredProduct) q.poll();
-            res.add(scoredProduct.getID());
-        }
-
+        Collections.sort(orderedList);
+        for(int i=orderedList.size()-1, c=0; i>=0 && c<count;i--, c++)
+            res.add(orderedList.get(i).getID());
+        
         return res;
     }
 
@@ -152,7 +204,7 @@ class MLTool {
         @param List<Integer> list2: second vector
         @return double: pearson cofficient
     */
-    public double pearsonCofficient(List<Integer> list1, List<Integer> list2) {
+    private double pearsonCofficient(List<Integer> list1, List<Integer> list2) {
         int minLen = (int)Math.min(list1.size(), list2.size());
         double r = 0;
         double mean1 = mean(list1),
@@ -168,6 +220,27 @@ class MLTool {
         }
 
         return n / Math.sqrt(d1*d2);
+    }
+
+    /*
+        Method: exactSimiarity
+        returns count of matched values between 2 vectors
+        if vectors are of unequal length, minimum length is assumed
+
+        @param List<Integer> list1: vector1
+        @param List<Integer> list2: vector2
+        @return int: count of matched values
+    */
+    private int exactSimilarity(List<Integer> list1, List<Integer> list2) {
+
+        int minLen = (int) Math.min(list1.size(), list2.size());
+        int score = 0;
+        for(int i=0;i<minLen;i++) {
+            int v1 = list1.get(i);
+            int v2 = list2.get(i);
+            if(v1==v2) score++;
+        }
+        return score;
     }
 
     private double mean(List<Integer> list) {
