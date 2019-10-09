@@ -2,18 +2,15 @@ import java.util.*;
 
 class ScoredProduct implements Comparable<ScoredProduct>{
     private String id;
-    private List<Integer> list;
     private double score;
     private boolean isSimilarRanked;
-    ScoredProduct(String id, List<Integer> list, double score, boolean isSimilarRanked) {
+    ScoredProduct(String id, double score, boolean isSimilarRanked) {
         this.id = id;
-        this.list = list;
         this.score = score;
         this.isSimilarRanked = !isSimilarRanked;
     }
 
     protected String getID() { return id; }
-    protected List<Integer> getList() { return list; }
     protected double getScore() { return score; }
 
     @Override public int compareTo(ScoredProduct otherProduct) {
@@ -49,7 +46,7 @@ class MLTool {
             String pid = (String) pair.getKey();
             List<Integer> list = (List<Integer>) pair.getValue();
             double score = exactSimilarity(key, list);
-            ScoredProduct scoredProduct = new ScoredProduct(pid, list, score, isSimilarRanked);
+            ScoredProduct scoredProduct = new ScoredProduct(pid, score, isSimilarRanked);
             orderedList.add(scoredProduct);
         }
 
@@ -108,7 +105,7 @@ class MLTool {
             String pid = (String) pair.getKey();
             List<Integer> list = (List<Integer>) pair.getValue();
             double score = cosineSimilarity(key, list);
-            ScoredProduct scoredProduct = new ScoredProduct(pid, list, score, isSimilarRanked);
+            ScoredProduct scoredProduct = new ScoredProduct(pid, score, isSimilarRanked);
             orderedList.add(scoredProduct);
         }
 
@@ -128,7 +125,7 @@ class MLTool {
         @param List<Integer> list2: 2nd vector
         @return double: cosineSimilarity
     */
-    public double cosineSimilarity(List<Integer> list1, List<Integer> list2) {
+    private double cosineSimilarity(List<Integer> list1, List<Integer> list2) {
         int minLen = (int)Math.min(list1.size(), list2.size());
         double res = 0;
         double list1Abs = 0, list2Abs = 0;
@@ -151,75 +148,93 @@ class MLTool {
     /*
         Method: collaborativeFilteredList
         returns a list of product-IDs that are most similar
-        to a given productID using Pearson Cofficient Ranking
+        to a given productID using Pearson Cofficient Ranking;
+        returns null if given productID was not found
 
         @param String productID
         @param HashMap<String, List<Integer>> frequencyMap
-                Here, key is productID of dell laptop;
-                value is a list of frequencies denoting viewcount of a user 
+                Here, key is anyonymous userID;
+                value is the related viewCount vector of dell products
         @param int count: number of recommendations to be returned
         @param boolean isSimilarRanked: true if similar products are needed, otherwise false
         @return List<String> : list of product IDs
     */
     public List<String> collaborativeFilteredList(
         String productID,
-        HashMap<String, List<Integer>> frequencyMap,
+        HashMap<String, HashMap<String, Integer>> dataset,
         int count,
         boolean isSimilarRanked
-    ) {
-        List<Integer> keyList = frequencyMap.get(productID);
-        if(keyList == null)
-            return null;
-        
-        PriorityQueue<ScoredProduct> q = new PriorityQueue<ScoredProduct>(count);
-        ArrayList<String> res = new ArrayList<String>();
+    ) { 
 
-        Iterator frequencyMapIterator = frequencyMap.entrySet().iterator();
-        while(frequencyMapIterator.hasNext()) {
-            Map.Entry pair = (Map.Entry) frequencyMapIterator.next();
-            String id = (String) pair.getKey();
-            if(id.equals(productID)) continue;
+        ArrayList<ScoredProduct> orderedList = new ArrayList<>();
+        ArrayList<String> res = new ArrayList<>();
 
-            List<Integer> frequencyList = (List<Integer>) pair.getValue();
-            double score = pearsonCofficient(keyList, frequencyList);
-            q.add( new ScoredProduct(id, frequencyList, score, isSimilarRanked) );
-            if(q.size() > count)
-                q.poll();
+        HashMap<String, Integer> keyVector = dataset.get(productID);
+        Iterator datasetIterator = dataset.entrySet().iterator();
+
+        while(datasetIterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) datasetIterator.next();
+            String pid = (String) pair.getKey();
+
+            if(pid.equals(productID)) continue;
+
+            HashMap<String, Integer> vector = (HashMap) pair.getValue();
+            double score = pearsonCofficient(keyVector, vector);
+            ScoredProduct scoredProduct = new ScoredProduct(pid, score, isSimilarRanked);
+            orderedList.add(scoredProduct);
         }
 
-        while(q.size() > 0) {
-            ScoredProduct scoredProduct = (ScoredProduct) q.poll();
-            res.add( scoredProduct.getID() );
-        }
+        Collections.sort(orderedList);
+        for(int i=orderedList.size()-1, c=0;i>=0 && c<count;i--, c++)
+            res.add(orderedList.get(i).getID());
 
         return res;
     }
 
     /*
         Method: pearsonCofficient
-        returns pearson cofficient between given 2 vectors
-        the larger vector is trimmed to shorter vector length
+        returns pearson cofficient between given 2 vectors;
+        assumes vector of equal length
 
-        @param List<Integer> list1: first vector
-        @param List<Integer> list2: second vector
+        @param HashMap<String, Integer> vector1: userid-response
+        @param HashMap<String, Integer> vector2: userid-response
         @return double: pearson cofficient
     */
-    private double pearsonCofficient(List<Integer> list1, List<Integer> list2) {
-        int minLen = (int)Math.min(list1.size(), list2.size());
-        double r = 0;
-        double mean1 = mean(list1),
-               mean2 = mean(list2);
-        
-        double n = 0, d1 = 0, d2 = 0;
-        for(int i=0;i<minLen;i++) {
-            int v1 = list1.get(i);
-            int v2 = list2.get(i);
-            n += (v1-mean1)*(v2-mean2);
-            d1 += Math.pow(v1-mean1, 2);
-            d2 += Math.pow(v2-mean2, 2);
+    private double pearsonCofficient(HashMap<String, Integer> vector1, HashMap<String, Integer> vector2) {
+        double sum1 = 0, sum2 = 0, n = 0,
+               mean1, mean2,
+               covXY=0, stdDevX=0, stdDevY=0;
+
+        Iterator vec1Iterator = vector1.entrySet().iterator();
+        while(vec1Iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) vec1Iterator.next();
+            String key = (String) pair.getKey();
+            int x = (Integer) pair.getValue();
+            
+            sum1 += x;
+            sum2 += vector2.get(key);
+            n++;
         }
 
-        return n / Math.sqrt(d1*d2);
+        mean1 = sum1 / n;
+        mean2 = sum2 / n;
+
+        vec1Iterator = vector1.entrySet().iterator();
+        while(vec1Iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) vec1Iterator.next();
+            String key = (String) pair.getKey();
+            int x = (Integer) pair.getValue();
+            int y = vector2.get(key);
+
+            double a = x-mean1;
+            double b = y-mean2;
+            covXY += a*b;
+            stdDevX += a*a;
+            stdDevY += b*b;
+        }
+        if(stdDevX==0 || stdDevY==0)
+            return -1;
+        return covXY / Math.sqrt(stdDevX*stdDevY) ;
     }
 
     /*
