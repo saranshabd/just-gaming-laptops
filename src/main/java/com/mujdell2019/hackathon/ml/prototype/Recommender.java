@@ -35,6 +35,8 @@ class Recommender {
 
         // Create hash values for features 
         this.query = new Query(attributeList, featureMap, 0, 20000, 360000);
+        HashMap<String, String> f = new HashMap<>();
+
         
         // Load hashed dataset
         this.hashedDellDataset = loadHashedDellDataset(attributeList);
@@ -49,6 +51,7 @@ class Recommender {
         // this.buyDataset = loadBuyDataset();
     }
 
+    // TODO return reverse list
     public List<String> searchRecommendations(String searchQuery, HashMap<String, String> extraFilter, int count) {
         List<Integer> hashedQuery = query.parseQuery(searchQuery, extraFilter);
         return mlTool.featureRankedList(
@@ -72,24 +75,27 @@ class Recommender {
                 40,
                 true
             );
-        
         List<String> res = new ArrayList<String>();
         String pid;
         boolean emptyFlag;
         for(int i=0, f=0; i<count; i++, f=(f+1)%minIterations) {
             emptyFlag = true;
-            for(int j=0;j<minIterations && emptyFlag;j++) 
+            for(int j=0;j<minIterations && emptyFlag;j++)
                 emptyFlag = recommended[j].size() == 0;
-            if(emptyFlag)
+            if(emptyFlag) 
                 break;
-
-            pid = recommended[f].get(0);
-            if(cartDeleted.contains(pid) || res.contains(pid)) {
+            
+            if(recommended[f].size()==0) {
                 i--;
                 continue;
             }
+            pid = recommended[f].get(0);
+            if(cartDeleted.contains(pid) || res.contains(pid)) {
+                i--;
+                recommended[f].remove(0);
+                continue;
+            }
 
-            recommended[f].remove(0);
             res.add(pid);
         }
 
@@ -171,16 +177,15 @@ class Recommender {
             ignoreIndex[0] = true;
             ignoreIndex[10] = true;
             ignoreIndex[12] = true;
-
             while((line=br.readLine()) != null) {
                 String[] token = line.split(",");
                 HashMap<String, String> productAttr = new HashMap<>();
                 Iterator attrIterator = attributeList.iterator();
                 for(int i=0;i<token.length;i++) {
                     if(ignoreIndex[i]) continue;
-                    productAttr.put((String)attrIterator.next(), token[i]);
+                    String attrName = (String) attrIterator.next();
+                    productAttr.put(attrName.trim().toLowerCase(), token[i].trim().toLowerCase());
                 }
-
                 List<Integer> hashedAttr = this.query.parseQuery("UNDEFINED", productAttr);
                 res.put(token[0], hashedAttr);
                 this.productIDSet.add(token[0]);

@@ -69,7 +69,6 @@ class Query {
         String[] query = queryString.split(" ");
 
         ArrayList<Integer> hashList = new ArrayList<Integer>();
-        int tokenCount = query.length;
 
         for(int attrIndex=0; attrIndex<attrList.size(); attrIndex++) {
             String attr = attrList.get(attrIndex);
@@ -81,10 +80,9 @@ class Query {
                 while(valueMapIterator.hasNext() && !found) {
                     Map.Entry valuePair = (Map.Entry) valueMapIterator.next();
                     String possibleValue = (String) valuePair.getKey();
-                    int valueIndex = searchValue(query, 0, tokenCount, possibleValue);
+                    int valueIndex = searchValue(query, 0, query.length, possibleValue);
                     
                     if(valueIndex == -1) continue;
-                    tokenCount = deleteStringAtIndex(query, tokenCount, valueIndex);
                     
                     hashList.add( getHash(attr, possibleValue) );
                     found = true;
@@ -117,7 +115,7 @@ class Query {
        @param String val
        @param int: hashvalue
     */
-    public int getHash(String attr, String val) {
+    private int getHash(String attr, String val) {
         if(attr.equals("price")) {
             int priceVal = Integer.parseInt(val);
             for(int hash=priceHashStart, price=priceStart; 
@@ -131,7 +129,7 @@ class Query {
         }
 
         if(!attrMap.containsKey(attr)) return 0;  // if attribute was not found
-        
+    
         HashMap<String, Integer> valueMap = attrMap.get(attr);
         Iterator valueMapIterator = valueMap.entrySet().iterator();
         while(valueMapIterator.hasNext()) {
