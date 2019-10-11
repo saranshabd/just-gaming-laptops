@@ -23,7 +23,6 @@ public class DellProductDBModel implements IMarshal {
 	private int price;
 	private String imageUrl;
 	private String productType; // global secondary index key
-	private String gpu;
 	private HashMap<String, String> features;
 	
 	// back-end analysis fields
@@ -35,7 +34,7 @@ public class DellProductDBModel implements IMarshal {
 	// dynamic sale fields
 	private boolean isInSale;
 	private double discount;
-	private int saleBuyCount;
+	private int saleBuyCount; // how many people bought this product during sale
 	
 	
 	/* Constructors */
@@ -53,11 +52,9 @@ public class DellProductDBModel implements IMarshal {
 	}
 	
 	public DellProductDBModel(String productId, 
-			String name, int price, 
-			String imageUrl, double discount, String gpu,
-			boolean isInSale, int saleBuyCount,
-			String productType, HashMap<String, String> features,
-			int clickedCount, int cartAddedCount, int cartDeletedCount, int boughtCount) {
+			String name, int price, String imageUrl, double discount, boolean isInSale, 
+			int saleBuyCount, String productType,  HashMap<String, String> features, 
+			int clickedCount,  int cartAddedCount,  int cartDeletedCount, int boughtCount) {
 		
 		this.productId = productId;
 		this.name = name;
@@ -65,7 +62,6 @@ public class DellProductDBModel implements IMarshal {
 		this.imageUrl = imageUrl;
 		this.discount = discount;
 		this.productType = productType;
-		this.gpu = gpu;
 		this.features = features;
 		this.isInSale = isInSale;
 		this.saleBuyCount = saleBuyCount;
@@ -103,10 +99,6 @@ public class DellProductDBModel implements IMarshal {
 	@DynamoDBAttribute(attributeName = "discount")
 	public double getDiscount() { return discount; }
 	public void setDiscount(double discount) { this.discount = discount; }
-	
-	@DynamoDBAttribute(attributeName = "gpu")
-	public String getGpu() { return gpu; }
-	public void setGpu(String gpu) { this.gpu = gpu; }
 
 	@DynamoDBAttribute(attributeName = "features")
 	public HashMap<String, String> getFeatures() { return features; }
