@@ -21,6 +21,15 @@ public class SearchedProductDAO {
 	
 	
 	/**
+	 * DEVELOPMENT METHOD: NOT TO BE INCLUDED IN PRODUCTION API
+	 * */
+	/*public void addProducts(List<SearchedProductDBModel> products) {
+		
+		dynamoDBUtil.getDynamoDBMapper().batchSave(products);
+	}*/
+	
+	
+	/**
 	 * load single searched product from DB based on searched query
 	 * */
 	public SearchedProductDBModel getProduct(String searchQuery) {

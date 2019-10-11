@@ -25,10 +25,19 @@ public class DellProductDAO {
 	/**
 	 * DEVELOPMENT METHOD: NOT TO BE INCLUDED IN PRODUCTION API
 	 * */
-	/*public void addProduct(List<DellProductDBModel> products) {
-
+	/*public void addProduct(DellProductDBModel product) {
+		
+		dynamoDBUtil.getDynamoDBMapper().save(product);
+	}*/
+	
+	/**
+	 * DEVELOPMENT METHOD: NOT TO BE INCLUDED IN PRODUCTION API
+	 * */
+	/*public void addProducts(List<DellProductDBModel> products) {
+		
 		dynamoDBUtil.getDynamoDBMapper().batchSave(products);
 	}*/
+	
 	
 	/**
 	 * check if given product id is valid

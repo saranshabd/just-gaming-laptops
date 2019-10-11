@@ -68,11 +68,11 @@ public class SearchedProductDBModel implements IMarshal {
 	public String getQueryId() { return queryId; }
 	public void setQueryId(String queryId) { this.queryId = queryId; }
 
-	@DynamoDBIndexHashKey(attributeName = "dellProductId")
+	@DynamoDBIndexHashKey(attributeName = "dellProductId", globalSecondaryIndexName = "dellProductId")
 	public String getDellProductId() { return dellProductId; }
 	public void setDellProductId(String dellProductId) { this.dellProductId = dellProductId; }
 
-	@DynamoDBIndexHashKey(attributeName = "userId")
+	@DynamoDBIndexHashKey(attributeName = "userId", globalSecondaryIndexName = "userId")
 	public String getUserId() { return userId; }
 	public void setUserId(String userId) { this.userId = userId; }
 
