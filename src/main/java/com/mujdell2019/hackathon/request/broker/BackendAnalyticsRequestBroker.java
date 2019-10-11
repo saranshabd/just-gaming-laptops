@@ -3,6 +3,7 @@ package com.mujdell2019.hackathon.request.broker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class BackendAnalyticsRequestBroker {
 	private ExceptionUtils exceptionUtils;
 	
 	
+	@CrossOrigin
 	@PutMapping("/event/click")
 	public ResponseEntity<APIResponse> registerClickEvent(@RequestBody JsonNode requestBody) {
 		
@@ -65,6 +67,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@PutMapping("/event/cart/add")
 	public ResponseEntity<APIResponse> registerAddToCartEvent(@RequestBody JsonNode requestBody) {
 		
@@ -103,6 +106,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 
+	@CrossOrigin
 	@PutMapping("/event/cart/delete")
 	public ResponseEntity<APIResponse> registerDeleteFromCartEvent(@RequestBody JsonNode requestBody) {
 	
@@ -141,6 +145,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 
+	@CrossOrigin
 	@PutMapping("/event/buy")
 	public ResponseEntity<APIResponse> registerBuyEvent(@RequestBody JsonNode requestBody) {
 	
@@ -179,6 +184,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@GetMapping("/product/top/buy")
 	public ResponseEntity<APIResponse> getTopProducts(@RequestBody JsonNode requestBody) {
 		
@@ -198,6 +204,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@GetMapping("/product/worst/buy")
 	public ResponseEntity<APIResponse> getWorstProducts(@RequestBody JsonNode requestBody) {
 		
@@ -217,6 +224,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@GetMapping("/product/top/view")
 	public ResponseEntity<APIResponse> getTopViewedProducts(@RequestBody JsonNode requestBody) {
 		
@@ -236,6 +244,7 @@ public class BackendAnalyticsRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@GetMapping("/order-conversion-rate")
 	public ResponseEntity<APIResponse> getOrderConversionRate(@RequestBody JsonNode requestBody) {
 		

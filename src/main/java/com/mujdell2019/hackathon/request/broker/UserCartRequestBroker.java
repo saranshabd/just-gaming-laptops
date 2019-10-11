@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,9 +30,8 @@ public class UserCartRequestBroker {
 	@Autowired
 	private ExceptionUtils exceptionUtils;
 
-	/**
-	 * get all products from cart
-	 * */
+	
+	@CrossOrigin
 	@GetMapping("")
 	public ResponseEntity<APIResponse> getAllProductsFromCart(@RequestBody JsonNode requestBody) {
 		
@@ -59,9 +59,7 @@ public class UserCartRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
-	/**
-	 * add item to cart
-	 * */
+	@CrossOrigin
 	@PutMapping("/item")
 	public ResponseEntity<APIResponse> addItemToCart(@RequestBody JsonNode requestBody) {
 		
@@ -91,9 +89,7 @@ public class UserCartRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
-	/**
-	 * delete item from cart
-	 * */
+	@CrossOrigin
 	@DeleteMapping("/item")
 	public ResponseEntity<APIResponse> deleteItemFromCart(@RequestBody JsonNode requestBody) {
 		

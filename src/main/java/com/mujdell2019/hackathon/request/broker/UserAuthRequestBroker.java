@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class UserAuthRequestBroker {
 	@Autowired
 	private StringUtils stringUtils;
 	
+	@CrossOrigin
 	@PostMapping("/register")
 	public ResponseEntity<APIResponse> registerNewUser(@RequestBody JsonNode requestBody) {
 		
@@ -60,6 +62,7 @@ public class UserAuthRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@PostMapping("/login")
 	public ResponseEntity<APIResponse> loginExistingUser(@RequestBody JsonNode requestBody) {
 		
@@ -89,6 +92,7 @@ public class UserAuthRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@PostMapping("/signout")
 	public ResponseEntity<APIResponse> signoutExistingUser(@RequestBody JsonNode requestBody) {
 		
@@ -116,6 +120,7 @@ public class UserAuthRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@GetMapping("/verify")
 	public ResponseEntity<APIResponse> verifyExistingUser(@RequestBody JsonNode requestBody) {
 		

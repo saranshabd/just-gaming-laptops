@@ -3,6 +3,7 @@ package com.mujdell2019.hackathon.request.broker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public class DynamicSaleRequestBroker {
 	@Autowired
 	private ExceptionUtils exceptionUtils;
 	
+	@CrossOrigin
 	@GetMapping("")
 	public ResponseEntity<APIResponse> getSaleFields(@RequestBody JsonNode requestBody) {
 		
@@ -33,6 +35,7 @@ public class DynamicSaleRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@PutMapping("")
 	public ResponseEntity<APIResponse> setSaleFields(@RequestBody JsonNode requestBody) {
 		
@@ -55,6 +58,7 @@ public class DynamicSaleRequestBroker {
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
 	}
 	
+	@CrossOrigin
 	@PutMapping("/status")
 	public ResponseEntity<APIResponse> setSaleStatus(@RequestBody JsonNode requestBody) {
 		
