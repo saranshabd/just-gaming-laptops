@@ -46,35 +46,19 @@
 	}
 	```
 
-- *GET* `~/api/user/auth/verify`
+- *GET* `~/api/user/auth/verify?username={<String>}`
 	<br>
 	
 	Check if username already exists
-	
-	**Parameters**
-	
-  ```json
-	{
-		"username" : "<String>"
-	}
-	```
 
 <br>
 	
 ## Cart Routes
 
-- *GET* `~/api/user/cart`
+- *GET* `~/api/user/cart?username={<String>}`
 	<br>
 	
 	Get all products in user cart
-	
-	**Parameters**
-	
-  ```json
-	{
-		"username" : "<String>"
-	}
-	```
 
 - *PUT* `~/api/user/cart/item`
 	<br>
@@ -160,57 +144,25 @@
 	}
 	```
 
-- *GET* `~/api/analytics/product/top/buy`
+- *GET* `~/api/analytics/product/top/buy?count={<Integer>}`
 	<br>
 	
 	Get top bought Dell products
-	
-	**Parameters**
-	
-	```json
-	{
-		"count": "<Integer>"
-	}
-	```
 
-- *GET* `~/api/analytics/product/worst/buy`
+- *GET* `~/api/analytics/product/worst/buy?count={<Integer>}`
 	<br>
 	
 	Get least bought Dell products
-	
-	**Parameters**
-	
-	```json
-	{
-		"count": "<Integer>"
-	}
-	```
 
-- *GET* `~/api/analytics/product/top/view`
+- *GET* `~/api/analytics/product/top/view?count={<Integer>}`
 	<br>
 	
 	Get top viewed Dell products
-	
-	**Parameters**
-	
-	```json
-	{
-		"count": "<Integer>"
-	}
-	```
 
-- *GET* `~/api/analytics/order-conversion-rate`
+- *GET* `~/api/analytics/order-conversion-rate?productId={<String>}`
 	<br>
 	
 	Get order conversion rate of a particular Dell product
-	
-	**Parameters**
-	
-	```json
-	{
-		"productId": "<String>"
-	}
-	```
 
 <br>
 
@@ -220,9 +172,6 @@
 	<br>
 	
 	Get sale fields
-	
-	**Parameters**
-	`None`
 
 - *PUT* `~/api/sale`
 	<br>
