@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -33,26 +34,9 @@ public class UserCartRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("")
-	public ResponseEntity<APIResponse> getAllProductsFromCart(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> getAllProductsFromCart(@RequestParam String username) {
 		
 		try {
-			// get user information from requestBody
-			JsonNode usernameNode = requestBody.get("username");
-
-			if (null == usernameNode) {
-				// invalid arguments passed
-				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(response, response.getStatus());
-			}
-			
-			String username = usernameNode.asText();
-			
-			if (stringUtils.isEmpty(username)) {
-				// empty strings passed
-				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(response, response.getStatus());
-			}
-			
 			APIResponse response = requestHandler.getAllCartProductFromCart(username);
 			return new ResponseEntity<>(response, response.getStatus());
 		

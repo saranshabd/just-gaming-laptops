@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -186,18 +187,9 @@ public class BackendAnalyticsRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("/product/top/buy")
-	public ResponseEntity<APIResponse> getTopProducts(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> getTopProducts(@RequestParam int count) {
 		
 		try {
-			JsonNode countNode = requestBody.get("count");
-			if (null == countNode) {
-				// invalid arguments passed
-				APIResponse errorResponse = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-			}
-			
-			int count = countNode.asInt();
-			
 			APIResponse response = requestHandler.topProducts(count);
 			return new ResponseEntity<>(response, response.getStatus());
 			
@@ -206,18 +198,9 @@ public class BackendAnalyticsRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("/product/worst/buy")
-	public ResponseEntity<APIResponse> getWorstProducts(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> getWorstProducts(@RequestParam int count) {
 		
 		try {
-			JsonNode countNode = requestBody.get("count");
-			if (null == countNode) {
-				// invalid arguments passed
-				APIResponse errorResponse = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-			}
-			
-			int count = countNode.asInt();
-			
 			APIResponse response = requestHandler.worstProducts(count);
 			return new ResponseEntity<>(response, response.getStatus());
 			
@@ -226,18 +209,9 @@ public class BackendAnalyticsRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("/product/top/view")
-	public ResponseEntity<APIResponse> getTopViewedProducts(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> getTopViewedProducts(@RequestParam int count) {
 		
 		try {
-			JsonNode countNode = requestBody.get("count");
-			if (null == countNode) {
-				// invalid arguments passed
-				APIResponse errorResponse = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-			}
-			
-			int count = countNode.asInt();
-			
 			APIResponse response = requestHandler.topViewedProducts(count);
 			return new ResponseEntity<>(response, response.getStatus());
 			
@@ -246,23 +220,9 @@ public class BackendAnalyticsRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("/order-conversion-rate")
-	public ResponseEntity<APIResponse> getOrderConversionRate(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> getOrderConversionRate(@RequestParam String productId) {
 		
 		try {
-			JsonNode productIdNode = requestBody.get("productId");
-			if (null == productIdNode) {
-				// invalid arguments passed
-				APIResponse errorResponse = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-			}
-			
-			String productId = productIdNode.asText();
-			if (stringUtils.isEmpty(productId)) {
-				// empty strings passed
-				APIResponse errorResponse = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
-			}
-			
 			APIResponse response = requestHandler.orderConversionRate(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			

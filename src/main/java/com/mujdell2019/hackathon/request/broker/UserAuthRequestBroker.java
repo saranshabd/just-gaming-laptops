@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -122,26 +123,9 @@ public class UserAuthRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("/verify")
-	public ResponseEntity<APIResponse> verifyExistingUser(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> verifyExistingUser(@RequestParam String username) {
 		
-		try {
-			// get user information from requestBody
-			JsonNode usernameNode = requestBody.get("username");
-			
-			if (null == usernameNode) {
-				// invalid arguments passed
-				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(response, response.getStatus());
-			}
-
-			String username = usernameNode.asText();
-			
-			if (stringUtils.isEmpty(username)) {
-				// empty strings passed
-				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
-				return new ResponseEntity<>(response, response.getStatus());
-			}
-			
+		try {			
 			APIResponse response = requestHandler.verifyExistingUser(username);
 			return new ResponseEntity<>(response, response.getStatus());
 			

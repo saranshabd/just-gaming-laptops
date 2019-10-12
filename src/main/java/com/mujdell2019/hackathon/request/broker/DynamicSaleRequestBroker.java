@@ -26,7 +26,7 @@ public class DynamicSaleRequestBroker {
 	
 	@CrossOrigin
 	@GetMapping("")
-	public ResponseEntity<APIResponse> getSaleFields(@RequestBody JsonNode requestBody) {
+	public ResponseEntity<APIResponse> getSaleFields() {
 		
 		try {
 			APIResponse response = requestHandler.getSaleFields();
