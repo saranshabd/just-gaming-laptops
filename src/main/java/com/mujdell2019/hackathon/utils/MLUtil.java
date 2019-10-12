@@ -31,26 +31,41 @@ public class MLUtil {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	
 
-	public List<String> searchProduct(HashMap<String, String> query, HashMap<String, String> filters, 
-			List<DellProductDBModel> dellProducts) throws IOException {
+	public List<String> searchProduct(HashMap<String, String> query, List<DellProductDBModel> dellProducts) throws IOException {
 
 		String url = mlApiUrl + "/recommendation/content-based";
 		
 		
 		// create request object
 		
-		JsonNode requestBody = objectMapper.createObjectNode();
-		JsonNode queryNode = objectMapper.createObjectNode();
-		JsonNode filtersNode = objectMapper.createObjectNode();
+		ObjectNode requestBody = objectMapper.createObjectNode();
 		
+		// query
+		ObjectNode queryNode = objectMapper.createObjectNode();
 		for (String key : query.keySet())
-			((ObjectNode) queryNode).put(key, query.get(key));
+			queryNode.put(key, query.get(key));
 		
-		for (String key : filters.keySet())
-			((ObjectNode) filtersNode).put(key, filters.get(key));
+		// dell products
+		ArrayNode dellProductsNode = objectMapper.createArrayNode();
+		for (DellProductDBModel product : dellProducts) {
+			ObjectNode currNode = objectMapper.createObjectNode();
+			
+			// basic product attributes
+			currNode.put("id", product.getProductId());
+			currNode.put("name", product.getName());
+			currNode.put("image", product.getImageUrl());
+			currNode.put("price", product.getPrice());
+			currNode.put("Disount", product.getDiscount());
+			
+			// features
+			for (String key : product.getFeatures().keySet())
+				currNode.put(key, product.getFeatures().get(key));
+			
+			dellProductsNode.add(currNode);
+		}
 		
-		((ObjectNode) requestBody).set("query", queryNode);
-		((ObjectNode) requestBody).set("filters", filtersNode);
+		requestBody.set("query", queryNode);
+		requestBody.set("dell_products", dellProductsNode);
 		
 		
 		// make HTTP request
@@ -73,7 +88,7 @@ public class MLUtil {
 		
 		return productIds;
 	}
-	
+
 	public List<String> browsingHistoryBasedRecommendation(List<String> cartAddedItems,  List<String> clickedItems, 
 			List<SearchedProductDBModel> anonymousData, List<DellProductDBModel> headphones, 
 			List<DellProductDBModel> backpack,  List<DellProductDBModel> keyboard, List<DellProductDBModel> monitor,

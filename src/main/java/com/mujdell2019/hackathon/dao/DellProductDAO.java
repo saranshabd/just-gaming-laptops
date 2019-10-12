@@ -1,6 +1,7 @@
 package com.mujdell2019.hackathon.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
+import com.mujdell2019.hackathon.models.db.ProductType;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 
 @Component
@@ -102,6 +105,25 @@ public class DellProductDAO {
 			arrResults.add(result);
 		
 		return arrResults;
+	}
+	
+	/**
+	 * load all dell products of specific product type
+	 * */
+	public List<DellProductDBModel> getAllOfProductType(ProductType productType) {
+		
+		DellProductDBModel productModel = new DellProductDBModel();
+		productModel.setProductType(productType.name());
+		
+		// scan DB for all the products
+		Map<String, AttributeValue> scanAttributes = new HashMap<>();
+		scanAttributes.put(":val1", new AttributeValue().withS(productType.name()));
+		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+				.withFilterExpression("productType = :val1").withExpressionAttributeValues(scanAttributes);
+		
+		List<DellProductDBModel> products = dynamoDBUtil.getDynamoDBMapper().scan(DellProductDBModel.class, scanExpression);
+		
+		return products;
 	}
 	
 	/**

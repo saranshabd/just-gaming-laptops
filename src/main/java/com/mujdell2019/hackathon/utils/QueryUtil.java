@@ -134,13 +134,13 @@ public class QueryUtil {
 
         String featureList[][] = new String[][] {
             { "display_type", "fhd", "qhd", "uhd", "oled" },
-            { "ram_size", "8gb", "16gb", "32gb", "64gb" },
+            { "ram_size", "8", "16", "32", "64" },
             { "price", "107019", "122664", "174218", "170663", "284083", "262750", "302927", "150041", "120886", "195551", "273772", "159996", "137241", "156441", "178399", "379015", "222573", "305772", "233240", "167818", "99553", "67482", "99482", "126503", "83126", "72460", "100904", "122237", "81704" },
             { "ram_type", "ddr4" },
-            { "display_size", "17.3inch", "15.6inch" },
+            { "display_size", "17.3", "15.6" },
             { "name", "alienware m17 gaming laptop", "alienware m15 gaming laptop", "new alienware m17 gaming laptop", "alienware area-51m gaming laptop", "new alienware m15 gaming laptop", "new dell g3 15 gaming laptop", "dell g7 15 gaming laptop", "dell g7 17 gaming laptop", "dell g5 15 se gaming laptop", "dell g5 15 gaming laptop" },
             { "cpu", "9th generation intel core i7-9750h", "8th generation intel core i7-8750h", "8th generation intel core i7-8750h", "8th generation intel core i9-8950hk", "9th generation intel core i9-9980hk", "9th generation intel core i7-9700", "9th generation intel core i9-9900k", "9th generation intel core i7-9700k", "9th generation intel core i9-9900", "9th generation intel core i5-9300h" },
-            { "storage", "1000gb", "256gb", "512gb", "4000gb", "2000gb", "128gb", "1tb", "2tb", "4tb" },
+            { "storage", "1000", "256", "512", "4000", "2000", "128", "1000", "2000", "4000" },
             { "gpu", "nvidia geforce rtx 2060 6gb gddr6 (oc ready)", "nvidia geforce rtx 2070 8gb gddr6 with max-q design", "nvidia geforce rtx 2080 8gb gddr6 with max-q design", "nvidia geforce gtx 1660 ti 6gb gddr6", "nvidia geforce rtx 2080 8gb gddr6 (oc ready)", "nvidia geforce rtx 2070 8gb gddr6 (oc ready)", "nvidia geforce gtx 1650 4gb gddr5", "nvidia geforce rtx 2060 6gb gddr6", "nvidia geforce gtx 1660 ti with max-q design 6gb gddr6" },
             { "display_fps", "60", "120", "144", "240", "2160", "1080" },
         };

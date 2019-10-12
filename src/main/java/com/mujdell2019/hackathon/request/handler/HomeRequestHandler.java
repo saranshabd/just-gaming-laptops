@@ -16,6 +16,7 @@ import com.mujdell2019.hackathon.dao.DellProductDAO;
 import com.mujdell2019.hackathon.dao.UserDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
+import com.mujdell2019.hackathon.models.db.ProductType;
 import com.mujdell2019.hackathon.utils.MLUtil;
 import com.mujdell2019.hackathon.utils.QueryUtil;
 
@@ -45,11 +46,11 @@ public class HomeRequestHandler {
 		HashMap<String, String> filters = new HashMap<>();
 		HashMap<String, String> resultingQuery = queryUtil.parseQuery(query, filters);
 		
-		// get all dell products
-		List<DellProductDBModel> dellProducts = dellProductDAO.getAll();
+		// get all dell laptops
+		List<DellProductDBModel> dellProducts = dellProductDAO.getAllOfProductType(ProductType.LAPTOP);
 		
 		// search query in DB and get product IDs of all the resulting products
-		List<String> productIds = mlUtil.searchProduct(resultingQuery, filters, dellProducts);
+		List<String> productIds = mlUtil.searchProduct(resultingQuery, dellProducts);
 		
 		// get corresponding dell products
 		List<DellProductDBModel> result = dellProductDAO.getProducts(productIds);
