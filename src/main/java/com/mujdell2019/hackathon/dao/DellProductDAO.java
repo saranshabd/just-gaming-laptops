@@ -90,9 +90,18 @@ public class DellProductDAO {
 	/**
 	 * load all dell products in DB
 	 * */
-	public List<DellProductDBModel> getAll() {
+	public ArrayList<DellProductDBModel> getAll() {
 
-		return dynamoDBUtil.getDynamoDBMapper().scan(DellProductDBModel.class, new DynamoDBScanExpression());
+		// load all dell products from DB
+		List<DellProductDBModel> results = 
+				dynamoDBUtil.getDynamoDBMapper().scan(DellProductDBModel.class, new DynamoDBScanExpression());
+		
+		// store the results in an ArrayList
+		ArrayList<DellProductDBModel> arrResults = new ArrayList<>();
+		for (DellProductDBModel result : results)
+			arrResults.add(result);
+		
+		return arrResults;
 	}
 	
 	/**
@@ -161,7 +170,7 @@ public class DellProductDAO {
 	public List<DellProductDBModel> getTopProducts(int count) {
 		
 		// load all dell products from DB
-		List<DellProductDBModel> products = getAll();
+		ArrayList<DellProductDBModel> products = getAll();
 		
 		// sort products based on total bought events count (descending order)
 		products.sort((DellProductDBModel p1, DellProductDBModel p2) -> p2.getBoughtCount() - p1.getBoughtCount());
@@ -181,7 +190,7 @@ public class DellProductDAO {
 	public List<DellProductDBModel> getWorstProducts(int count) {
 		
 		// load all dell products from DB
-		List<DellProductDBModel> products = getAll();
+		ArrayList<DellProductDBModel> products = getAll();
 		
 		// sort products based on total bought events count (ascending order)
 		products.sort((DellProductDBModel p1, DellProductDBModel p2) -> p1.getBoughtCount() - p2.getBoughtCount());
@@ -200,7 +209,7 @@ public class DellProductDAO {
 	public List<DellProductDBModel> getTopViewedProducts(int count) {
 		
 		// load all dell products from DB
-		List<DellProductDBModel> products = getAll();
+		ArrayList<DellProductDBModel> products = getAll();
 		
 		// sort products based on total bought events count (descending order)
 		products.sort((DellProductDBModel p1, DellProductDBModel p2) -> p2.getClickedCount() - p1.getClickedCount());
