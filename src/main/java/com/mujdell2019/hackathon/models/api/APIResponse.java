@@ -10,7 +10,7 @@ public class APIResponse {
 	
 	private String message;
 	private HttpStatus status;
-	private JsonNode resposne;
+	private JsonNode response;
 	
 	
 	/* Constructors */
@@ -20,7 +20,7 @@ public class APIResponse {
 	public APIResponse(String message, HttpStatus status, JsonNode response) {
 		this.message = message;
 		this.status = status;
-		this.resposne = response;
+		this.response = response;
 	}
 	
 	
@@ -32,6 +32,6 @@ public class APIResponse {
 	public HttpStatus getStatus() { return status; }
 	public void setStatus(HttpStatus status) { this.status = status; }
 
-	public JsonNode getResposne() { return resposne; }
-	public void setResposne(JsonNode resposne) { this.resposne = resposne; }
+	public JsonNode getResposne() { return response; }
+	public void setResposne(JsonNode resposne) { this.response = resposne; }
 }

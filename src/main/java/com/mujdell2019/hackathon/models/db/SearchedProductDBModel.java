@@ -133,11 +133,15 @@ public class SearchedProductDBModel implements IMarshal {
 		((ObjectNode) result).put("query", getQuery());
 		
 		// features
-		JsonNode featuresNode = objectMapper.createObjectNode();
 		HashMap<String, String> features = getFeatures();
-		for (String key : features.keySet())
-			((ObjectNode) featuresNode).put(key, features.get(key));
-		((ObjectNode) result).set("features", featuresNode);
+		((ObjectNode) result).put("display_type", features.get("display_type"));
+		((ObjectNode) result).put("display_size", features.get("display_size"));
+		((ObjectNode) result).put("display_fps", features.get("display_fps"));
+		((ObjectNode) result).put("ram_type", features.get("ram_type"));
+		((ObjectNode) result).put("ram_size", features.get("ram_size"));
+		((ObjectNode) result).put("cpu", features.get("cpu"));
+		((ObjectNode) result).put("gpu", features.get("gpu"));
+		((ObjectNode) result).put("storage", features.get("storage"));
 		
 		return result;
 	}
