@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.models.db.DynamicSaleDBModel;
+import com.mujdell2019.hackathon.utils.DynamicSaleUtil;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 
 @Component
@@ -17,6 +18,8 @@ public class DynamicSaleDAO {
 
 	@Autowired
 	private DynamoDBUtil dynamoDBUtil;
+	@Autowired
+	private DynamicSaleUtil dynamicSaleUtil;
 	
 	public DynamicSaleDBModel getSaleFields() {
 		// load sale fields from DB
@@ -36,7 +39,7 @@ public class DynamicSaleDAO {
 		saleFields.setSaleDiscount(saleFields.getDefaultSaleDiscount());
 		
 		// update object in DB
-		dynamoDBUtil.getDynamoDBMapper().save(saleFields);
+		setSaleFields(saleFields);
 	}
 
 	public void setSaleFields(DynamicSaleDBModel saleFields) {
@@ -53,7 +56,18 @@ public class DynamicSaleDAO {
 		saleFields.setSaleDiscount(saleDiscount);
 		
 		// update object in DB
-		dynamoDBUtil.getDynamoDBMapper().save(saleFields);
+		setSaleFields(saleFields);
+	}
+	
+	public void setSaleDiscount(double saleDiscount) {
+		// get sale fields from DB
+		DynamicSaleDBModel saleFields = getSaleFields();
+		
+		// set sale discount
+		saleFields.setSaleDiscount(saleDiscount);
+		
+		// update sale fields in DB
+		setSaleFields(saleFields);
 	}
 	
 	public void toggleIsSale(boolean isSale) {
@@ -64,9 +78,24 @@ public class DynamicSaleDAO {
 		saleFields.setSale(isSale);
 		
 		// update object in DB
-		dynamoDBUtil.getDynamoDBMapper().save(saleFields);
+		setSaleFields(saleFields);
 	}
 	
+	public void updateSaleDiscount() {
+		// get sale fields from DB
+		DynamicSaleDBModel saleFields = getSaleFields();
+		
+		// get all products up for sale
+		List<DellProductDBModel> saleProducts = saleFields.getSaleProducts();
+		
+		// calculate and set sale discount
+		double saleDiscount = dynamicSaleUtil.calculateDiscount(saleProducts);
+		saleFields.setSaleDiscount(saleDiscount);
+		
+		// update sale fields in DB
+		setSaleFields(saleFields);
+	}
+
 	public void addProductInSale(DellProductDBModel product) {
 		// get dynamic sale fields from DB
 		DynamicSaleDBModel saleFields = getSaleFields();
@@ -76,8 +105,11 @@ public class DynamicSaleDAO {
 		
 		// update sale fields in DB
 		setSaleFields(saleFields);
+		
+		// update sale discount
+		updateSaleDiscount();
 	}
-	
+
 	public void deleteProductFromSale(String productId) {
 		// get dynamic sale fields from DB
 		DynamicSaleDBModel saleFields = getSaleFields();
@@ -94,5 +126,8 @@ public class DynamicSaleDAO {
 		
 		// update sale fields in DB
 		setSaleFields(saleFields);
+		
+		// update sale discount
+		updateSaleDiscount();
 	}
 }

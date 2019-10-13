@@ -68,6 +68,9 @@ public class RefreshDynamicSaleWorderThread extends Thread {
 		
 		// save the updated sale fields
 		dynamicSaleDAO.setSaleFields(saleFields);
+		
+		// update sale discount
+		dynamicSaleDAO.updateSaleDiscount();
 	}
 	
 	private void clearAnalyticsFieldsOfAllProducts() {
