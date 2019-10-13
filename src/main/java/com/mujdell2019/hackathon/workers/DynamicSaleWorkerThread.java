@@ -6,15 +6,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mujdell2019.hackathon.dao.DellProductDAO;
 import com.mujdell2019.hackathon.dao.DynamicSaleDAO;
 import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.models.db.DynamicSaleDBModel;
 
 public class DynamicSaleWorkerThread extends Thread {
-
-	@Autowired
-	private DellProductDAO dellProductDAO;
+	
 	@Autowired
 	private DynamicSaleDAO dynamicSaleDAO;
 	
@@ -35,15 +32,15 @@ public class DynamicSaleWorkerThread extends Thread {
 				
 				if (saleFields.isSale()) {
 					
-					// get worst 3 Dell products of current month
-					List<DellProductDBModel> worstProducts = dellProductDAO.getWorstProducts(3);
+					// get all dell products up for sale
+					List<DellProductDBModel> worstProducts = saleFields.getSaleProducts();
 					
 					// start sale
 					for (DellProductDBModel product : worstProducts) {
 						product.setInSale(true);
 						product.setDiscount(saleFields.getSaleDiscount());
 					}
-					dellProductDAO.updateProducts(worstProducts);
+					dynamicSaleDAO.setSaleFields(saleFields);
 					
 					// wait for sale to close
 					try { Thread.sleep(TimeUnit.DAYS.toMillis(saleFields.getSaleDays())); }
@@ -55,11 +52,10 @@ public class DynamicSaleWorkerThread extends Thread {
 						product.setInSale(false);
 						product.setDiscount(0);
 					}
-					dellProductDAO.updateProducts(worstProducts);
-					
+					dynamicSaleDAO.setSaleFields(saleFields);
 				}
 				
-				// reset sale fields
+				// reset all sale fields to their default values
 				dynamicSaleDAO.resetSaleFields();
 				
 				// wait for next month

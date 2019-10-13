@@ -37,6 +37,11 @@ public class DynamicSaleDAO {
 		// update object in DB
 		dynamoDBUtil.getDynamoDBMapper().save(saleFields);
 	}
+
+	public void setSaleFields(DynamicSaleDBModel saleFields) {
+		
+		dynamoDBUtil.getDynamoDBMapper().save(saleFields);
+	}
 	
 	public void setSaleFields(int saleDays, double saleDiscount) {
 		// get dynamic sale object from DB
