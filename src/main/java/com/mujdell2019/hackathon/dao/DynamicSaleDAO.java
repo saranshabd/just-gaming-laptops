@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.models.db.DynamicSaleDBModel;
 import com.mujdell2019.hackathon.utils.DynamoDBUtil;
 
@@ -64,5 +65,34 @@ public class DynamicSaleDAO {
 		
 		// update object in DB
 		dynamoDBUtil.getDynamoDBMapper().save(saleFields);
+	}
+	
+	public void addProductInSale(DellProductDBModel product) {
+		// get dynamic sale fields from DB
+		DynamicSaleDBModel saleFields = getSaleFields();
+		
+		// add product up for sale
+		saleFields.getSaleProducts().add(product);
+		
+		// update sale fields in DB
+		setSaleFields(saleFields);
+	}
+	
+	public void deleteProductFromSale(String productId) {
+		// get dynamic sale fields from DB
+		DynamicSaleDBModel saleFields = getSaleFields();
+		
+		// delete product from sale
+		int index = 0, requiredIndex = 0;
+		for (DellProductDBModel product : saleFields.getSaleProducts()) {
+			if (productId.equals(product.getProductId())) {
+				requiredIndex = index;
+			}
+			++index;
+		}
+		saleFields.getSaleProducts().remove(requiredIndex);
+		
+		// update sale fields in DB
+		setSaleFields(saleFields);
 	}
 }

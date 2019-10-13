@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mujdell2019.hackathon.dao.DellProductDAO;
 import com.mujdell2019.hackathon.dao.DynamicSaleDAO;
 import com.mujdell2019.hackathon.models.api.APIResponse;
+import com.mujdell2019.hackathon.models.db.DellProductDBModel;
 import com.mujdell2019.hackathon.models.db.DynamicSaleDBModel;
 
 @Component
@@ -18,6 +20,8 @@ public class DynamicSaleRequestHandler {
 
 	@Autowired
 	private DynamicSaleDAO dynamicSaleDAO;
+	@Autowired
+	private DellProductDAO dellProductDAO;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -45,5 +49,24 @@ public class DynamicSaleRequestHandler {
 		dynamicSaleDAO.toggleIsSale(isSale);
 		
 		return new APIResponse("sale status set", HttpStatus.OK, null);
+	}
+	
+	public APIResponse addProductInSale(String productId) {
+		
+		// get dell product with given product id from DB
+		DellProductDBModel product = dellProductDAO.getProduct(productId);
+		
+		// add the product for sale
+		dynamicSaleDAO.addProductInSale(product);
+		
+		return new APIResponse("product added", HttpStatus.OK, null);
+	}
+	
+	public APIResponse deleteProductFromSale(String productId) {
+		
+		// remove dell product from sale
+		dynamicSaleDAO.deleteProductFromSale(productId);
+		
+		return new APIResponse("product deleted", HttpStatus.OK, null);
 	}
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,6 +75,44 @@ public class DynamicSaleRequestBroker {
 			boolean saleStatus = saleStatusNode.asBoolean();
 			
 			APIResponse response = requestHandler.toggleSaleStatus(saleStatus);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
+	}
+	
+	@PutMapping("/product")
+	public ResponseEntity<APIResponse> addProductInSale(@RequestBody JsonNode requestBody) {
+		
+		try {
+			JsonNode productIdNode = requestBody.get("productId");
+			if (null == productIdNode || "".equals(productIdNode.asText())) {
+				// invalid arguments passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			String productId = productIdNode.asText();
+			
+			APIResponse response = requestHandler.addProductInSale(productId);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) { return exceptionUtils.reportException(e); }
+	}
+	
+	@DeleteMapping("/product")
+	public ResponseEntity<APIResponse> deleteProductFromSale(@RequestBody JsonNode requestBody) {
+		
+		try {
+			JsonNode productIdNode = requestBody.get("productId");
+			if (null == productIdNode || "".equals(productIdNode.asText())) {
+				// invalid arguments passed
+				APIResponse response = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(response, response.getStatus());
+			}
+			
+			String productId = productIdNode.asText();
+			
+			APIResponse response = requestHandler.deleteProductFromSale(productId);
 			return new ResponseEntity<>(response, response.getStatus());
 			
 		} catch (Exception e) { return exceptionUtils.reportException(e); }
