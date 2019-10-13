@@ -151,6 +151,7 @@ public class DellProductDBModel implements IMarshal {
 		((ObjectNode) result).put("productType", getProductType());
 		((ObjectNode) result).put("isInSale", isInSale());
 		((ObjectNode) result).put("saleBuyCount", getSaleBuyCount());
+		((ObjectNode) result).put("budgetClass", getBudgetClass());
 		
 		// features
 		JsonNode featuresNode = objectMapper.createObjectNode();
