@@ -11,14 +11,14 @@
 	
 	**Parameters**
 	
-  ```json
+  	```json
 	{
 		"username" : "<String>",
 		"name"     : "<String>",
 		"password" : "<String>"
 	}
 	```
-	
+
 - *POST* `~/api/user/auth/login`
 	<br>
 	
@@ -26,7 +26,7 @@
 	
 	**Parameters**
 	
-  ```json
+  	```json
 	{
 		"username" : "<String>",
 		"password" : "<String>"
@@ -40,7 +40,7 @@
 	
 	**Parameters**
 	
-  ```json
+  	```json
 	{
 		"username" : "<String>"
 	}
@@ -67,7 +67,7 @@
 	
 	**Parameters**
 	
-  ```json
+  	```json
 	{
 		"username"  : "<String>",
 		"productId" : "<String>"
@@ -81,7 +81,7 @@
 	
 	**Parameters**
 	
-  ```json
+ 	 ```json
 	{
 		"username"  : "<String>",
 		"productId" : "<String>"
@@ -196,3 +196,88 @@
 		"saleStatus": "<Boolean>"
 	}
 	```
+
+- *PUT* `~/api/sale/product`
+	
+	Add Dell products to cart.
+	
+	**Parameters**
+	```json
+	{
+		"productId": "<String>"
+	}
+	```
+
+- *DELETE* `~/api/sale/product`
+
+	Delete Dell products from sale.
+	
+	**Parameters**
+	```json
+	{
+		"productId": "<String>"
+	}
+	```
+
+## Recommendation/ML Routes
+
+- *POST* `~/api/recommend/product/search`
+
+	Search Dell products.
+	
+	**Parameters**
+	```json
+	{
+		"username": "<String>",
+		"query": "<String>",
+		"filters": "<Map>"
+	}
+	```
+
+- *POST* `~/api/recommend/product/trending`
+
+	Recommend products based on user browser history.
+	
+	**Parameters**
+	```json
+	{
+		"username": "<String>"
+	}
+	```
+
+- *POST* `~/api/recommend/product/browsing-history`
+
+	Recommend products based on user activity on dell.com, and browser history
+	
+	**Parameters**
+	``json
+	{
+		"username": "<String>"
+	}
+	```
+
+- *POST* `~/api/recommend/product/gadgets`
+
+	Recommend related gadgets to given product.
+	
+	**Parameters**
+	```json
+	{
+		"username": "<String>",
+		"productId": "<String>"
+	}
+	```
+
+- *POST* `~/api/recommend/product/similar-bought`
+
+	Recommend related gadgets to given product.
+	
+	**Parameters**
+	```json
+	{
+		"username": "<String>",
+		"productId": "<String>"
+	}
+	```
+
+
