@@ -140,4 +140,12 @@ public class UserDAO {
 		
 		return result;
 	}
+	
+	/**
+	 * load user object from DB
+	 * */
+	public UserDBModel getUser(String username) {
+		
+		return dynamoDBUtil.getDynamoDBMapper().load(UserDBModel.class, username);
+	}
 }

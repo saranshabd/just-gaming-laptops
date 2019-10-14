@@ -22,8 +22,7 @@ public class UserActivityDAO {
 	
 	public void updateClickedEventCount(String username, String productId, int count) {
 		// load user activity from DB
-		UserActivityDBModel userActivity = dynamoDBUtil.getDynamoDBMapper()
-				.load(UserActivityDBModel.class, username, consistentReadConfig);
+		UserActivityDBModel userActivity = getUserActivity(username);
 		
 		// update user activity
 		if (userActivity.getClicked().containsKey(productId))
@@ -36,8 +35,7 @@ public class UserActivityDAO {
 	
 	public void updateCartAddedEventCount(String username, String productId, int count) {
 		// load user activity from DB
-		UserActivityDBModel userActivity = dynamoDBUtil.getDynamoDBMapper()
-				.load(UserActivityDBModel.class, username, consistentReadConfig);
+		UserActivityDBModel userActivity = getUserActivity(username);
 		
 		// update user activity
 		if (userActivity.getCartAdded().containsKey(productId))
@@ -50,8 +48,7 @@ public class UserActivityDAO {
 
 	public void updateCartDeletedEventCount(String username, String productId, int count) {
 		// load user activity from DB
-		UserActivityDBModel userActivity = dynamoDBUtil.getDynamoDBMapper()
-				.load(UserActivityDBModel.class, username, consistentReadConfig);
+		UserActivityDBModel userActivity = getUserActivity(username);
 		
 		// update user activity
 		if (userActivity.getCartDeleted().containsKey(productId))
@@ -64,8 +61,7 @@ public class UserActivityDAO {
 
 	public void updateBoughtEventCount(String username, String productId, int count) {
 		// load user activity from DB
-		UserActivityDBModel userActivity = dynamoDBUtil.getDynamoDBMapper()
-				.load(UserActivityDBModel.class, username, consistentReadConfig);
+		UserActivityDBModel userActivity = getUserActivity(username);
 		
 		// update user activity
 		if (userActivity.getBought().containsKey(productId))
@@ -74,5 +70,10 @@ public class UserActivityDAO {
 		
 		// save updated user activity in DB
 		dynamoDBUtil.getDynamoDBMapper().save(userActivity);
+	}
+	
+	public UserActivityDBModel getUserActivity(String username) {
+		
+		return dynamoDBUtil.getDynamoDBMapper().load(UserActivityDBModel.class, username, consistentReadConfig);
 	}
 }

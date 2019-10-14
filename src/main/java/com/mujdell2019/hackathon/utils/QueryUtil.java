@@ -30,8 +30,8 @@ public class QueryUtil {
         int maxInterval = 0;
         Iterator valueMapIterator = valueMap.entrySet().iterator();
         while(valueMapIterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)valueMapIterator.next();
-            maxInterval = ((List<String>)pair.getValue()).size();
+            Map.Entry pair = (Map.Entry) valueMapIterator.next();
+            maxInterval = ((List<String>) pair.getValue()).size();
         }
         maxInterval += 100;
         
@@ -99,14 +99,10 @@ public class QueryUtil {
             if(!found) 
                 if(extraFilter.containsKey(attr))
                     result.put(attr, extraFilter.get(attr));
-                else
-                    result.put(attr, null);
         }
 
         if(extraFilter.containsKey("price"))
             result.put( "price", extraFilter.get("price") );
-        else
-            result.put("price", null);
 
         return result;
     }
