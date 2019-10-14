@@ -97,6 +97,30 @@ public class RecommendRequestHandler {
 		return new APIResponse("browsing history recommended products", HttpStatus.OK, response);
 	}
 	
+	public APIResponse trendingRecommendation(String username) throws IOException {
+		
+		// check if user with given user-name exists or not
+		if (!userDAO.exists(username))
+			return new APIResponse("private route", HttpStatus.UNAUTHORIZED, null);
+		
+		// get recommended products from ML server
+		List<String> productIds = mlUtil.trendingRecommendation();
+		
+		// get corresponding dell products
+		List<DellProductDBModel> products = dellProductDAO.getProducts(productIds);
+		
+		
+		// create response object
+		
+		ObjectNode response = objectMapper.createObjectNode();
+		ArrayNode productsNode = objectMapper.createArrayNode();
+		for (DellProductDBModel item : products)
+			productsNode.add(item.marshal());
+		response.set("products", productsNode);
+		
+		return new APIResponse("browsing history recommended products", HttpStatus.OK, response);
+	}
+	
 	public APIResponse gadgetsRecommendation(String username, String productId) throws IOException {
 		
 		// check if user with given user-name exists or not

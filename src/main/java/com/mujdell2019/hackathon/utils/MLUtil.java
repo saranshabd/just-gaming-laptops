@@ -54,7 +54,7 @@ public class MLUtil {
 		
 		// retrieve product IDs from response object
 		
-		ArrayNode productIdsNode = (ArrayNode) response.get("productIds");
+		ArrayNode productIdsNode = (ArrayNode) response.get("response").get("productIds");
 		List<String> productIds = new ArrayList<>();
 		
 		if (null != productIdsNode) {
@@ -65,6 +65,34 @@ public class MLUtil {
 		return productIds;
 	}
 
+	public List<String> trendingRecommendation() throws IOException {
+		
+		String url = mlApiUrl + "/trending";
+		
+		
+		// make HTTP request
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		HttpEntity<String> request = new HttpEntity<>(null, headers);
+		String responseAsStr = restTemplate.postForObject(url, request, String.class);
+		JsonNode response = objectMapper.readTree(responseAsStr);
+		
+		
+		// retrieve product IDs from response object
+		
+		ArrayNode productIdsNode = (ArrayNode) response.get("response").get("productIds");
+		List<String> productIds = new ArrayList<>();
+		
+		if (null != productIdsNode) {
+			for (JsonNode item : productIdsNode)
+				productIds.add(item.asText());
+		}
+
+		return productIds;
+	}
+	
 	/**
 	 * returns both gadgets and laptops
 	 * */
@@ -95,7 +123,7 @@ public class MLUtil {
 		
 		// retrieve product IDs from response object
 		
-		ArrayNode productIdsNode = (ArrayNode) response.get("productIds");
+		ArrayNode productIdsNode = (ArrayNode) response.get("response").get("productIds");
 		List<String> productIds = new ArrayList<>();
 		
 		if (null != productIdsNode) {
@@ -128,7 +156,7 @@ public class MLUtil {
 		
 		// retrieve product IDs from response object
 		
-		ArrayNode productIdsNode = (ArrayNode) response.get("productIds");
+		ArrayNode productIdsNode = (ArrayNode) response.get("response").get("productIds");
 		List<String> productIds = new ArrayList<>();
 		
 		if (null != productIdsNode) {
@@ -158,10 +186,12 @@ public class MLUtil {
 		String responseAsStr = restTemplate.postForObject(url, request, String.class);
 		JsonNode response = objectMapper.readTree(responseAsStr);
 		
+		System.out.println(response);
+		
 		
 		// retrieve product IDs from response object
 		
-		ArrayNode productIdsNode = (ArrayNode) response.get("productIds");
+		ArrayNode productIdsNode = (ArrayNode) response.get("response").get("productIds");
 		List<String> productIds = new ArrayList<>();
 		
 		if (null != productIdsNode) {

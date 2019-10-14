@@ -56,6 +56,28 @@ public class RecommendRequestBroker {
 			
 		} catch (Exception e) { return exceptionUtil.reportException(e); }
 	}
+
+	@CrossOrigin
+	@PostMapping("/trending")
+	public ResponseEntity<APIResponse> trendingHistory(@RequestBody JsonNode requestBody) {
+		
+		try {
+			JsonNode usernameNode = requestBody.get("username");
+			
+			// check for invalid arguments
+			if (null == usernameNode || "".equals(usernameNode.asText())) {
+				APIResponse errorResponse = new APIResponse("invalid arguments", HttpStatus.BAD_REQUEST, null);
+				return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+			}
+			
+			// parse arguments
+			String username = usernameNode.asText();
+			
+			APIResponse response = requestHandler.trendingRecommendation(username);
+			return new ResponseEntity<>(response, response.getStatus());
+			
+		} catch (Exception e) { return exceptionUtil.reportException(e); }
+	}
 	
 	@CrossOrigin
 	@PostMapping("/browsing-history")
@@ -78,7 +100,7 @@ public class RecommendRequestBroker {
 			
 		} catch (Exception e) { return exceptionUtil.reportException(e); }
 	}
-	
+
 	@CrossOrigin
 	@PostMapping("/gadgets")
 	public ResponseEntity<APIResponse> gadgets(@RequestBody JsonNode requestBody) {
